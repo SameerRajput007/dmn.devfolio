@@ -1,7 +1,6 @@
 import './components/TodoList.css';
 
-import { useEffect, useState } from 'react'
-import TodoList from './components/TodoList'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import {
   ArrowDown,
   ArrowRight,
@@ -14,11 +13,15 @@ import {
   ExternalLink,
   Menu,
   X,
+  ArrowUp,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import portraitImage from './assets/portrait.jpg'
 import ghostImage from './assets/ghost-project.jpg'
 import './App.css'
+
+// Below the fold, so load it after the first paint
+const TodoList = lazy(() => import('./components/TodoList'))
 
 
 
@@ -29,7 +32,7 @@ const projects = [
     description:
       'A personal portfolio to showcase my skills, projects, and experience with a responsive layout.',
     tags: ['React', 'CSS', 'JavaScript'],
-    link: 'https://github.com/',
+    link: null, // TODO: paste your portfolio's GitHub repo URL
     image: portraitImage,
   },
   {
@@ -38,7 +41,7 @@ const projects = [
     description:
       'A simple task manager that helps users add tasks, mark them complete, and remove them.',
     tags: ['React', 'Hooks', 'CSS'],
-    link: 'https://github.com/',
+    link: '#playground', // the live todo app on this page
     image: ghostImage,
   },
   {
@@ -47,7 +50,7 @@ const projects = [
     description:
       'An exploration of modern interfaces, clean typography, and responsive design patterns.',
     tags: ['HTML', 'CSS', 'Responsive'],
-    link: 'https://github.com/',
+    link: null, // TODO: add repo/demo URL, and a unique image
     image: ghostImage,
   },
 ]
@@ -57,11 +60,15 @@ const skills = [
   { name: 'CSS3', level: 'Advanced', percent: 85, category: 'Styling' },
   { name: 'JavaScript', level: 'Intermediate', percent: 70, category: 'Language' },
   { name: 'React.js', level: 'Intermediate', percent: 70, category: 'Framework' },
-  { name: 'Responsive Design', level: 'Intermediate', percent: 80, category: 'Design' },
+  { name: 'Responsive Design', level: 'Advanced', percent: 80, category: 'Design' },
   { name: 'Git & GitHub', level: 'Learning', percent: 60, category: 'Workflow' },
   { name: 'Bootstrap 5', level: 'Learning', percent: 60, category: 'Framework' },
   { name: 'PHP', level: 'Learning', percent: 50, category: 'Language' },
 ]
+
+const roles = ['Frontend Developer', 'React Learner', 'UI Builder', 'Problem Solver']
+const projectFilters = ['All', 'React', 'CSS', 'HTML']
+const sectionIds = ['home', 'about', 'services', 'skills', 'projects', 'playground', 'contact']
 
 const formatTechLabel = (label) => `{${label}}`
 
@@ -97,14 +104,63 @@ function SectionHeading({ eyebrow, title, description }) {
 }
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      const saved = localStorage.getItem('theme')
+      if (saved) return saved === 'dark'
+    } catch { /* storage unavailable */ }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
   const [menuOpen, setMenuOpen] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 })
   const [formStatus, setFormStatus] = useState('')
   const [skillFilter, setSkillFilter] = useState('all')
+  const [projectFilter, setProjectFilter] = useState('All')
+  const [activeSection, setActiveSection] = useState('home')
+  const [scrolled, setScrolled] = useState(false)
+  const [showTop, setShowTop] = useState(false)
+  const [roleIndex, setRoleIndex] = useState(0)
 
   useEffect(() => {
     document.documentElement.dataset.theme = darkMode ? 'dark' : 'light'
+    try { localStorage.setItem('theme', darkMode ? 'dark' : 'light') } catch { /* ignore */ }
   }, [darkMode])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (event) => event.key === 'Escape' && setMenuOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24)
+      setShowTop(window.scrollY > 700)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && setActiveSection(entry.target.id)),
+      { rootMargin: '-45% 0px -50% 0px' },
+    )
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timer = setInterval(() => setRoleIndex((i) => (i + 1) % roles.length), 2600)
+    return () => clearInterval(timer)
+  }, [])
 
   const reveal = {
     hidden: { opacity: 0, y: 24 },
@@ -142,8 +198,10 @@ function App() {
     ['Projects', '#projects'],
     ['Contact', '#contact'],
   ]
-  const advancedSkills = skills.filter((skill) => skill.level === 'Advanced')
-  const growingSkills = skills.filter((skill) => skill.level !== 'Advanced')
+  const filteredProjects =
+    projectFilter === 'All'
+      ? projects
+      : projects.filter((project) => project.tags.includes(projectFilter))
   const filteredSkills =
     skillFilter === 'all'
       ? skills
@@ -155,7 +213,22 @@ function App() {
 
   return (
     <div className="portfolio">
-      <header className="site-header">
+      <a href="#main" className="skip-link">Skip to content</a>
+      <motion.div
+        aria-hidden="true"
+        style={{
+          scaleX,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: 'var(--accent)',
+          transformOrigin: '0% 50%',
+          zIndex: 1000,
+        }}
+      />
+      <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
         <a href="#home" className="brand" aria-label="Go to homepage">
           <span className="brand-mark">&#123;$&#125;</span>
           <span className="brand-name">Sameer<span className="brand-dot"></span></span>
@@ -166,6 +239,8 @@ function App() {
             <a
               key={label}
               href={href}
+              className={activeSection === href.slice(1) ? 'is-active' : ''}
+              aria-current={activeSection === href.slice(1) ? 'true' : undefined}
               onClick={() => setMenuOpen(false)}
             >
               {label}
@@ -192,18 +267,19 @@ function App() {
             type="button"
             onClick={() => setMenuOpen((current) => !current)}
             aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
         </div>
       </header>
 
-      <main>
+      <main id="main">
         <section className="hero hero-cinematic" id="home">
           <div className="hero-topline">
             <div className="availability">
               <span className="availability-dot" />
-              Available for learning and opportunities
+              Open to junior frontend roles and internships
             </div>
             <span className="hero-edition">PORTFOLIO / FRONTEND DEVELOPER</span>
           </div>
@@ -216,13 +292,16 @@ function App() {
           >
             <h1 className="hero-display-name">SAMEER</h1>
             <div className="hero-portrait">
-              <img src={portraitImage} alt="Sameer" className="hero-image" />
+              <img src={portraitImage} alt="Sameer" className="hero-image" fetchPriority="high" decoding="async" />
             </div>
           </motion.div>
 
           <div className="hero-bottomline">
             <div className="hero-copy">
               <p className="hero-intro">HELLO, I&apos;M SAMEER</p>
+              <p className="hero-role">
+                <span key={roleIndex} className="hero-role-text">{roles[roleIndex]}</span>
+              </p>
               <p className="hero-description">
                 I&apos;m a frontend developer passionate about building modern,
                 responsive, and user-friendly web experiences with React.
@@ -276,7 +355,7 @@ function App() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="about-image-wrap">
-              <img src={portraitImage} alt="Sameer profile" />
+              <img src={portraitImage} alt="Sameer profile" loading="lazy" decoding="async" />
               <div className="image-caption">
                 <span className="caption-line" />
                 <span>Developer in progress</span>
@@ -364,97 +443,6 @@ function App() {
 
           <div className="skills-dashboard">
             <motion.article
-              className="skills-panel skills-overview"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="skills-panel-heading">
-                <span className="skills-panel-icon"><Code2 size={18} /></span>
-                <span className="skills-panel-label">Toolkit snapshot</span>
-                <span className="skills-live-indicator">IN PROGRESS</span>
-              </div>
-              <div className="skills-overview-number">{String(skills.length).padStart(2, '0')}</div>
-              <p className="skills-overview-caption">skills in my frontend toolkit</p>
-              <p className="skills-overview-copy">
-                Learning by building practical, responsive experiences and
-                strengthening the fundamentals behind them.
-              </p>
-              <div className="skills-overview-stats">
-                <div>
-                  <strong>{String(advancedSkills.length).padStart(2, '0')}</strong>
-                  <span>Advanced</span>
-                </div>
-                <div>
-                  <strong>{String(growingSkills.length).padStart(2, '0')}</strong>
-                  <span>Growing</span>
-                </div>
-              </div>
-            </motion.article>
-
-            <motion.article
-              className="skills-panel skills-proficiency"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.08 }}
-            >
-              <div className="skills-panel-heading">
-                <span className="skills-panel-icon"><Palette size={18} /></span>
-                <span className="skills-panel-label">Proficiency overview</span>
-              </div>
-              <div className="skills-proficiency-list">
-                {skills.map((skill, index) => (
-                  <div className="skills-proficiency-row" key={skill.name}>
-                    <div className="skills-proficiency-meta">
-                      <span className="skills-tech-label">{formatTechLabel(skill.name)}</span>
-                      <span>{skill.percent}%</span>
-                    </div>
-                    <div
-                      className="skills-meter"
-                      role="progressbar"
-                      aria-label={`${skill.name} proficiency`}
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      aria-valuenow={skill.percent}
-                    >
-                      <motion.span
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.percent}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.75, delay: index * 0.08 }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <span className="skills-panel-footnote">Self-assessed learning progress</span>
-            </motion.article>
-
-            <motion.article
-              className="skills-panel skills-stack"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.16 }}
-            >
-              <div className="skills-panel-heading">
-                <span className="skills-panel-icon"><Smartphone size={18} /></span>
-                <span className="skills-panel-label">Core technologies</span>
-              </div>
-              <div className="skills-stack-list">
-                {skills.map((skill, index) => (
-                  <div className="skills-stack-item" key={skill.name}>
-                    <span className="skills-stack-index">0{index + 1}</span>
-                    <span className="skills-stack-name skills-tech-label">{formatTechLabel(skill.name)}</span>
-                    <span className="skills-stack-category">{skill.category}</span>
-                  </div>
-                ))}
-              </div>
-              <span className="skills-panel-footnote">The building blocks I use most</span>
-            </motion.article>
-
-            <motion.article
               className="skills-panel skills-explorer"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -501,30 +489,6 @@ function App() {
               </div>
             </motion.article>
 
-            <motion.article
-              className="skills-panel skills-focus"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="skills-panel-heading">
-                <span className="skills-panel-icon"><ArrowRight size={18} /></span>
-                <span className="skills-panel-label">Current growth areas</span>
-              </div>
-              <p className="skills-focus-intro">
-                Keeping momentum with the skills I&apos;m actively building.
-              </p>
-              <div className="skills-focus-list">
-                {growingSkills.map((skill, index) => (
-                  <div className="skills-focus-item" key={skill.name}>
-                    <span className="skills-focus-step">0{index + 1}</span>
-                    <span className="skills-tech-label">{formatTechLabel(skill.name)}</span>
-                    <span className="skills-focus-level">{skill.level}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.article>
           </div>
         </section>
 
@@ -535,8 +499,22 @@ function App() {
             description="A few examples of what I build and what I am learning along the way."
           />
 
+          <div className="skills-filter project-filter" role="group" aria-label="Filter projects">
+            {projectFilters.map((filter) => (
+              <button
+                className={projectFilter === filter ? 'is-active' : ''}
+                key={filter}
+                type="button"
+                aria-pressed={projectFilter === filter}
+                onClick={() => setProjectFilter(filter)}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+
           <div className="project-grid">
-            {projects.map((project, index) => (
+            {filteredProjects.map((project, index) => (
               <motion.article
                 className="project-card"
                 key={project.title}
@@ -547,18 +525,19 @@ function App() {
                 transition={{ delay: index * 0.08 }}
               >
                 <div className="project-image">
-                  <img src={project.image} alt={project.title} />
+                  <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
                   <span className="project-index">0{index + 1}</span>
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="project-open"
-                    aria-label={`Open ${project.title}`}
-                    title={project.title}
-                  >
-                    <ExternalLink size={18} />
-                  </a>
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      {...(project.link.startsWith('http') && { target: '_blank', rel: 'noreferrer' })}
+                      className="project-open"
+                      aria-label={`Open ${project.title}`}
+                      title={project.title}
+                    >
+                      <ExternalLink size={18} />
+                    </a>
+                  )}
                 </div>
 
                 <div className="project-body">
@@ -568,9 +547,17 @@ function App() {
                   <div className="project-tags">
                     {project.tags.map((tag) => <span key={tag}>{formatTechLabel(tag)}</span>)}
                   </div>
-                  <a href={project.link} target="_blank" rel="noreferrer" className="text-link">
-                    View project <ArrowRight size={16} />
-                  </a>
+                  {project.link ? (
+                    <a
+                      href={project.link}
+                      {...(project.link.startsWith('http') && { target: '_blank', rel: 'noreferrer' })}
+                      className="text-link"
+                    >
+                      {project.link.startsWith('#') ? 'Try it below' : 'View project'} <ArrowRight size={16} />
+                    </a>
+                  ) : (
+                    <span className="project-soon">Case study coming soon</span>
+                  )}
                 </div>
               </motion.article>
             ))}
@@ -591,17 +578,19 @@ function App() {
             <p>
               Use this lightweight task list to organize your next steps.
               <br />
-              Tasks currently live in memory only.
+              Tasks are saved in your browser, so they survive a refresh.
             </p>
           </div>
-          <TodoList />
+          <Suspense fallback={<p className="todo-empty">Loading workspace...</p>}>
+            <TodoList />
+          </Suspense>
         </section>
 
         <section className="resume-banner section-wrap">
           <div className="resume-content">
             <span className="eyebrow">LET&apos;S BUILD SOMETHING</span>
-            <h2>Have a project in mind?</h2>
-            <p>I&apos;m always open to connecting, learning, and exploring new opportunities.</p>
+            <h2>Hiring or collaborating?</h2>
+            <p>I&apos;m looking for my first frontend role. Say hello and I&apos;ll reply quickly.</p>
           </div>
           <a className="button button-primary" href="#contact">
             Contact me <ArrowRight size={17} />
@@ -715,6 +704,12 @@ function App() {
 
         <span className="copyright">© {new Date().getFullYear()} Sameer</span>
       </footer>
+
+      {showTop && (
+        <a href="#home" className="back-to-top" aria-label="Back to top">
+          <ArrowUp size={18} />
+        </a>
+      )}
     </div>
   )
 }

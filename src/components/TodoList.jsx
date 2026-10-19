@@ -6,6 +6,7 @@ import {
   Clock3,
   Flame,
   House,
+  Pencil,
   Plus,
   Star,
   Trash2,
@@ -60,6 +61,8 @@ const defaultTasks = [
 function TodoList() {
   const [taskText, setTaskText] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
+  const [editingId, setEditingId] = useState(null)
+  const [editText, setEditText] = useState('')
   const [tasks, setTasks] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('todo-tasks'))
@@ -116,6 +119,23 @@ function TodoList() {
         task.id === id ? { ...task, important: !task.important } : task,
       ),
     )
+  }
+
+  function startEdit(task) {
+    setEditingId(task.id)
+    setEditText(task.text)
+  }
+
+  function saveEdit(id) {
+    const text = editText.trim()
+    if (text) {
+      setTasks((current) => current.map((task) => (task.id === id ? { ...task, text } : task)))
+    }
+    setEditingId(null)
+  }
+
+  function clearCompleted() {
+    setTasks((current) => current.filter((task) => !task.completed))
   }
 
   function deleteTask(id) {
@@ -190,6 +210,11 @@ function TodoList() {
         <div className="todo-list-heading">
           <h3>Your Tasks</h3>
           <span>{filteredTasks.length} {filteredTasks.length === 1 ? 'task' : 'tasks'}</span>
+          {completedCount > 0 && (
+            <button className="todo-clear" type="button" onClick={clearCompleted}>
+              Clear completed
+            </button>
+          )}
         </div>
 
         {filteredTasks.length === 0 ? (
@@ -207,9 +232,32 @@ function TodoList() {
                   {task.completed && <Check size={16} />}
                 </button>
                 <span className="todo-task-copy">
-                  <span className={task.completed ? 'is-complete' : ''}>{task.text}</span>
+                  {editingId === task.id ? (
+                    <input
+                      className="todo-edit-input"
+                      value={editText}
+                      autoFocus
+                      aria-label="Edit task"
+                      onChange={(event) => setEditText(event.target.value)}
+                      onBlur={() => saveEdit(task.id)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') saveEdit(task.id)
+                        if (event.key === 'Escape') setEditingId(null)
+                      }}
+                    />
+                  ) : (
+                    <span className={task.completed ? 'is-complete' : ''}>{task.text}</span>
+                  )}
                   <small>{task.due}</small>
                 </span>
+                <button
+                  className="todo-task-edit"
+                  type="button"
+                  onClick={() => startEdit(task)}
+                  aria-label={`Edit ${task.text}`}
+                >
+                  <Pencil size={16} />
+                </button>
                 <button
                   className={`todo-task-important ${task.important ? 'is-important' : ''}`}
                   type="button"
