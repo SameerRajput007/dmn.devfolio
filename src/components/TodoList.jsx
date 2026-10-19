@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   CalendarDays,
   Check,
@@ -19,35 +19,32 @@ const filters = [
   { id: 'important', label: 'Important', icon: Star },
 ]
 
-function TodoList() {
-  const [taskText, setTaskText] = useState('')
-  const [activeFilter, setActiveFilter] = useState('all')
-  const [tasks, setTasks] = useState([
+const defaultTasks = [
     {
       id: 1,
       text: 'Finish the portfolio design',
-      due: 'Today · 10:00 AM',
+      due: 'Today',
       completed: true,
       important: true,
     },
     {
       id: 2,
       text: 'Build the projects section',
-      due: 'Today · 2:00 PM',
+      due: 'Today',
       completed: false,
       important: false,
     },
     {
       id: 3,
       text: 'Update my resume',
-      due: 'Tomorrow · 11:00 AM',
+      due: 'Tomorrow',
       completed: false,
       important: false,
     },
     {
       id: 4,
       text: 'Write blog post',
-      due: 'Yesterday · 6:30 PM',
+      due: 'Yesterday',
       completed: true,
       important: false,
     },
@@ -58,7 +55,23 @@ function TodoList() {
       completed: false,
       important: true,
     },
-  ])
+]
+
+function TodoList() {
+  const [taskText, setTaskText] = useState('')
+  const [activeFilter, setActiveFilter] = useState('all')
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('todo-tasks'))
+      if (Array.isArray(saved)) return saved
+    } catch { /* ignore bad data */ }
+    return defaultTasks
+  })
+
+  useEffect(() => {
+    try { localStorage.setItem('todo-tasks', JSON.stringify(tasks)) } catch { /* ignore */ }
+  }, [tasks])
+
 
   const completedCount = tasks.filter((task) => task.completed).length
   const remainingCount = tasks.length - completedCount
@@ -79,7 +92,7 @@ function TodoList() {
       {
         id: Date.now(),
         text,
-        due: 'Today · Just added',
+        due: 'Today',
         completed: false,
         important: false,
       },
@@ -177,17 +190,6 @@ function TodoList() {
         <div className="todo-list-heading">
           <h3>Your Tasks</h3>
           <span>{filteredTasks.length} {filteredTasks.length === 1 ? 'task' : 'tasks'}</span>
-          <label className="todo-sort">
-            <span className="todo-visually-hidden">Task filter</span>
-            <select
-              value={activeFilter}
-              onChange={(event) => setActiveFilter(event.target.value)}
-            >
-              {filters.map((filter) => (
-                <option key={filter.id} value={filter.id}>{filter.label}</option>
-              ))}
-            </select>
-          </label>
         </div>
 
         {filteredTasks.length === 0 ? (
@@ -232,10 +234,6 @@ function TodoList() {
       </div>
 
       <aside className="todo-progress" aria-label="Task progress">
-        <div className="todo-progress-toggle" aria-hidden="true">
-          <span>☼</span><span className="todo-toggle-track"><i /></span><span>☾</span>
-        </div>
-
         <div className="todo-progress-art" aria-hidden="true">
           <span className="todo-art-star">✦</span>
           <span className="todo-art-planet"><span /></span>
