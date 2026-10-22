@@ -1,4 +1,5 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 :root   {
   font-family: "Georgia", serif;
   color-scheme: dark;
@@ -3236,8 +3237,8 @@ main button:focus-visible svg {
 
 :root[data-theme='light'] #root .portfolio .todo-workspace .todo-task-check.is-complete svg,
 :root[data-theme='light'] #root .portfolio .todo-workspace .todo-task-check.is-complete svg * {
-  color: #950F0F !important;
-  stroke: #950F0F !important;
+  color: #000 !important;
+  stroke: #000 !important;
 }
 
 :root[data-theme='light'] #root .portfolio .todo-workspace .todo-brand-icon,
@@ -3275,19 +3276,6 @@ main button:focus-visible svg {
 :root[data-theme='light'] #root .portfolio .contact-form :is(#contact-name, #contact-email, #contact-message),
 :root[data-theme='light'] #root .portfolio .contact-form :is(#contact-name, #contact-email, #contact-message):focus {
   border-color: transparent;
-}
-
-:root[data-theme='light'] #root .portfolio h2 {
-  background: none;
-  color: #fff;
-  mix-blend-mode: difference;
-  -webkit-text-fill-color: #fff;
-}
-
-:root[data-theme='light'] #root .portfolio h2 span {
-  background: none;
-  color: #fff;
-  -webkit-text-fill-color: #fff;
 }
 
 
@@ -3375,81 +3363,14 @@ body,
   border-color: var(--border);
 }
 
-/* Skills now has a single panel */
-.skills-explorer { grid-column: 1 / -1; }
-
-.project-soon {
-  font-size: 0.85rem;
-  color: var(--muted);
-  font-style: italic;
+:root[data-theme='light'] #root .portfolio .skills .skills-panel {
+  background: rgba(var(--todo-card-rgb), 0.6);
 }
 
-/* ===== Interaction upgrades ===== */
-.skip-link {
-  position: fixed;
-  left: 1rem;
-  top: -4rem;
-  z-index: 2000;
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
-  transition: top 0.2s ease;
-}
-.skip-link:focus { top: 1rem; }
-
-.site-header { transition: box-shadow 0.25s ease, background 0.25s ease; }
-.site-header.is-scrolled { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18); }
-
-.portfolio .nav-links > a.is-active { color: var(--accent); }
-
-.hero-role { margin: 0.35rem 0 0.9rem; min-height: 1.6em; font-weight: 600; color: var(--accent); }
-.hero-role-text { display: inline-block; animation: roleIn 0.45s ease both; }
-@keyframes roleIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-.project-filter { margin-bottom: 1.5rem; }
-
-.back-to-top {
-  position: fixed;
-  right: 1.25rem;
-  bottom: 1.25rem;
-  z-index: 900;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
-}
-.back-to-top:hover { transform: translateY(-3px); }
-
-.todo-clear,
-.todo-task-edit {
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-.todo-clear { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
-.todo-task-edit { display: grid; place-items: center; width: 34px; height: 34px; border: 0; }
-.todo-clear:hover,
-.todo-task-edit:hover { color: var(--accent); border-color: var(--accent); }
-.todo-edit-input {
-  width: 100%;
-  padding: 0.35rem 0.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--accent);
-  background: transparent;
-  color: inherit;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-role-text { animation: none; }
-  .back-to-top { transition: none; }
+:root[data-theme='light'] #root .portfolio .skills .skills-overview-caption,
+:root[data-theme='light'] #root .portfolio .skills .skills-overview-copy,
+:root[data-theme='light'] #root .portfolio .skills .skills-explorer-heading p,
+:root[data-theme='light'] #root .portfolio .skills .skills-focus-intro {
+  color: #38BDF8;
+  -webkit-text-fill-color: currentColor;
 }
