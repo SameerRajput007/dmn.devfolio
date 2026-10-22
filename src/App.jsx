@@ -805,7 +805,7 @@ function App() {
           <span className="brand-name">Sameer<span className="brand-dot"></span></span>
         </a>
 
-        <p>Designed and buily &#123;{$}&#125;.</p>
+        <p>Designed and built by self.</p>
 
         <div className="footer-socials">
           <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
