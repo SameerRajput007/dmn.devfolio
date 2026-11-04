@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   CalendarDays,
   Check,
@@ -59,6 +59,7 @@ const defaultTasks = [
 ]
 
 function TodoList() {
+  const cancelEditRef = useRef(false)
   const [taskText, setTaskText] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
   const [editingId, setEditingId] = useState(null)
@@ -122,6 +123,7 @@ function TodoList() {
   }
 
   function startEdit(task) {
+    cancelEditRef.current = false
     setEditingId(task.id)
     setEditText(task.text)
   }
@@ -239,10 +241,15 @@ function TodoList() {
                       autoFocus
                       aria-label="Edit task"
                       onChange={(event) => setEditText(event.target.value)}
-                      onBlur={() => saveEdit(task.id)}
+                      onBlur={() => {
+                        if (!cancelEditRef.current) saveEdit(task.id)
+                      }}
                       onKeyDown={(event) => {
                         if (event.key === 'Enter') saveEdit(task.id)
-                        if (event.key === 'Escape') setEditingId(null)
+                        if (event.key === 'Escape') {
+                          cancelEditRef.current = true
+                          setEditingId(null)
+                        }
                       }}
                     />
                   ) : (
