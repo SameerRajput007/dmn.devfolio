@@ -28,7 +28,7 @@ function Contact({ formStatus, onSubmit }) {
           </a>
 
           <a
-            href="https://github.com/"
+            href="https://github.com/SameerRajput007"
             target="_blank"
             rel="noreferrer"
             className="contact-method"
@@ -42,7 +42,8 @@ function Contact({ formStatus, onSubmit }) {
           </a>
         </div>
 
-        <form className="contact-form" onSubmit={onSubmit}>
+        <form className="contact-form inquiry-ticket" onSubmit={onSubmit}>
+          <div className="ticket-top"><span>LET’S MAKE SOMETHING</span><span>SR / INQUIRY</span></div>
           <label htmlFor="contact-name">Your name</label>
           <div className="contact-field">
             <input

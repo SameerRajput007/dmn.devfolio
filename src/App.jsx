@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { ArrowRight, ArrowUp } from 'lucide-react'
-import { motion, useScroll, useSpring } from 'framer-motion'
+import { LazyMotion, MotionConfig, m as motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { projects, roles, skills } from './data/portfolioData.js'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
@@ -10,15 +10,20 @@ import Services from './sections/Services.jsx'
 import Skills from './sections/Skills.jsx'
 import Projects from './sections/Projects.jsx'
 import Contact from './sections/Contact.jsx'
+import VisualLab from './components/VisualLab.jsx'
+import PortfolioFAQ from './sections/PortfolioFAQ.jsx'
 import './components/TodoList.css'
 import './App.css'
 
-const sectionIds = ['home', 'about', 'services', 'skills', 'projects', 'playground', 'contact']
+const sectionIds = ['home', 'about', 'services', 'skills', 'projects', 'visual-lab', 'playground', 'contact']
 
 // Below the fold, so load it after the first paint
 const TodoList = lazy(() => import('./components/TodoList'))
 
+const loadMotionFeatures = () => import('./motion-features.js').then(module => module.default)
+
 function App() {
+  const reduceMotion = useReducedMotion()
   const [darkMode, setDarkMode] = useState(() => {
     try {
       const saved = localStorage.getItem('theme')
@@ -72,10 +77,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (reduceMotion) return
     const timer = setInterval(() => setRoleIndex((i) => (i + 1) % roles.length), 2600)
     return () => clearInterval(timer)
-  }, [])
+  }, [reduceMotion])
 
   function handleContactSubmit(event) {
     event.preventDefault()
@@ -111,10 +116,13 @@ function App() {
         )
 
   return (
+    <MotionConfig reducedMotion="user">
+    <LazyMotion features={loadMotionFeatures} strict>
     <div className="portfolio">
       <a href="#main" className="skip-link">Skip to content</a>
       <motion.div
         aria-hidden="true"
+        className="reading-progress"
         style={{
           scaleX,
           position: 'fixed',
@@ -137,7 +145,7 @@ function App() {
         scrolled={scrolled}
       />
 
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <Hero role={roles[roleIndex]} />
         <About />
 
@@ -154,6 +162,8 @@ function App() {
           projectFilter={projectFilter}
           onProjectFilterChange={setProjectFilter}
         />
+
+        <VisualLab />
 
         <section className="todo-section section-wrap section-space" id="playground">
           <div className="todo-section-heading">
@@ -177,6 +187,8 @@ function App() {
           </Suspense>
         </section>
 
+        <PortfolioFAQ />
+
         <section className="resume-banner section-wrap">
           <div className="resume-content">
             <span className="eyebrow">LET&apos;S BUILD SOMETHING</span>
@@ -194,11 +206,15 @@ function App() {
       <Footer />
 
       {showTop && (
+        <nav aria-label="Page controls">
         <a href="#home" className="back-to-top" aria-label="Back to top">
           <ArrowUp size={18} />
         </a>
+        </nav>
       )}
     </div>
+    </LazyMotion>
+    </MotionConfig>
   )
 }
 

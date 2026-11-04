@@ -4,7 +4,7 @@ import {
   Code2,
   Mail,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import portraitImage from '../assets/portrait.jpg'
 
 function Hero({ role }) {
@@ -20,7 +20,7 @@ function Hero({ role }) {
 
       <motion.div
         className="hero-visual"
-        initial={{ opacity: 0, y: 24 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.15 }}
       >
@@ -53,17 +53,14 @@ function Hero({ role }) {
           </div>
 
           <div className="social-links">
-            <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
+            <a href="https://github.com/SameerRajput007" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
               <Code2 size={19} />
-            </a>
-            <a href="https://linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn">
-              <span className="linkedin-mark" aria-hidden="true">in</span>
             </a>
             <a href="mailto:sameerrajput493@gmail.com" aria-label="Email" data-tooltip="Email">
               <Mail size={19} />
             </a>
             <span className="social-divider" />
-            <span className="social-caption">Let&apos;s create something great</span>
+            <a href="#visual-lab" className="social-caption lab-hero-link">Try the new visual lab ↗</a><span className="social-caption hero-original-caption">Let&apos;s create something great</span>
           </div>
         </div>
       </div>

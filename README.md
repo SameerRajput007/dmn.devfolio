@@ -1,16 +1,40 @@
-# React + Vite
+# Sameer’s portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + Vite 8 portfolio with responsive project sections, an interactive portrait lab, a task-list demo, and a contact form that prepares an email in the visitor’s email application.
 
-Currently, two official plugins are available:
+Public URL: https://dmndevfolio21.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Develop
 
-## React Compiler
+Use Node 24 (validated with 24.22.1) and npm 11.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```sh
+npm ci
+npm run dev -- --host 0.0.0.0 --port 5173
+```
 
-## Expanding the ESLint configuration
+No backend, secret variables, or external font service is required. Theme preference and demo tasks are saved locally when storage is available; tasks support editing.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Validate and preview
+
+```sh
+npm run build
+npm run lint
+npm run preview -- --host 0.0.0.0 --port 5173
+```
+
+See [validation results](docs/VALIDATION.md) for functional/browser, accessibility, Lighthouse and dependency-audit evidence. There is no repository test runner configured.
+
+## Project notes
+
+- [Mac and Vercel synchronization](docs/LOCAL-SYNC.md)
+- [Concept implementation map](docs/CONCEPT-MAP.md)
+- [Product requirements](PRD.md)
+- [Architecture](ARCHITECTURE.md)
+- [Design](DESIGN.md)
+- [Development rules](RULES.md)
+- [Release tasks](TASKS.md)
+- [Handoff facts](MEMORY.md)
+- [Search and release steps](docs/SEARCH-AND-RELEASE.md)
+
+The visual lab’s layered and rotating views operate on a flat portrait. They do not reconstruct a 3D person. Production security headers are configured in `vercel.json` and apply after deployment. Search Console and any eligible Business Profile require owner setup; this code does not register or publish them.

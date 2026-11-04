@@ -1,5 +1,5 @@
 import { ArrowRight, ExternalLink } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import SectionHeading from '../components/SectionHeading.jsx'
 import formatTechLabel from '../utils/formatTechLabel.js'
 import revealVariants from './revealVariants.js'

@@ -5,6 +5,7 @@ const navLinks = [
   ['Services', '#services'],
   ['Skills', '#skills'],
   ['Projects', '#projects'],
+  ['Lab', '#visual-lab'],
   ['Contact', '#contact'],
 ]
 
@@ -19,12 +20,12 @@ function Navbar({
 }) {
   return (
     <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
-      <a href="#home" className="brand" aria-label="Go to homepage">
+      <a href="#home" className="brand" aria-label="Sameer homepage">
         <span className="brand-mark">&#123;$&#125;</span>
         <span className="brand-name">Sameer<span className="brand-dot"></span></span>
       </a>
 
-      <nav className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
+      <nav id="primary-navigation" aria-label="Primary navigation" className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
         {navLinks.map(([label, href]) => (
           <a
             key={label}
@@ -58,6 +59,7 @@ function Navbar({
           onClick={onToggleMenu}
           aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
           aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
         >
           {menuOpen ? <X size={21} /> : <Menu size={21} />}
         </button>

@@ -1,5 +1,5 @@
 import { ArrowRight, Code2, Palette, Smartphone } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import SectionHeading from '../components/SectionHeading.jsx'
 import formatTechLabel from '../utils/formatTechLabel.js'
 
@@ -46,7 +46,7 @@ function Skills({ skills, filteredSkills, skillFilter, onSkillFilterChange }) {
         </motion.article>
 
         <motion.article
-          className="skills-panel skills-proficiency"
+          className="skills-panel skills-proficiency" tabIndex={0} aria-label="Skill proficiency"
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -85,7 +85,7 @@ function Skills({ skills, filteredSkills, skillFilter, onSkillFilterChange }) {
         </motion.article>
 
         <motion.article
-          className="skills-panel skills-stack"
+          className="skills-panel skills-stack" tabIndex={0} aria-label="Core technology stack"
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
