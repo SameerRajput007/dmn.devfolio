@@ -2,6 +2,8 @@ import './components/TodoList.css';
 
 import { useEffect, useState } from 'react'
 import TodoList from './components/TodoList'
+import VisualLab from './components/VisualLab'
+import { LazyMotion, MotionConfig, useReducedMotion, useScroll, m as motion } from 'framer-motion'
 import {
   ArrowDown,
   ArrowRight,
@@ -15,12 +17,13 @@ import {
   Menu,
   X,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
 import portraitImage from './assets/portrait.jpg'
 import ghostImage from './assets/ghost-project.jpg'
 import './App.css'
 
 
+
+const loadMotionFeatures = () => import('./motion-features.js').then(module => module.default)
 
 const projects = [
   {
@@ -29,7 +32,7 @@ const projects = [
     description:
       'A personal portfolio to showcase my skills, projects, and experience with a responsive layout.',
     tags: ['React', 'CSS', 'JavaScript'],
-    link: 'https://github.com/',
+    link: 'https://github.com/SameerRajput007/dmn.devfolio21',
     image: portraitImage,
   },
   {
@@ -38,16 +41,16 @@ const projects = [
     description:
       'A simple task manager that helps users add tasks, mark them complete, and remove them.',
     tags: ['React', 'Hooks', 'CSS'],
-    link: 'https://github.com/',
+    link: '#playground',
     image: ghostImage,
   },
   {
-    title: 'Creative UI Design',
+    title: 'Interaction Lab',
     category: 'UI Development',
     description:
-      'An exploration of modern interfaces, clean typography, and responsive design patterns.',
+      'An interactive portrait study exploring particles, visual treatments, and layered interfaces.',
     tags: ['HTML', 'CSS', 'Responsive'],
-    link: 'https://github.com/',
+    link: '#visual-lab',
     image: ghostImage,
   },
 ]
@@ -97,17 +100,29 @@ function SectionHeading({ eyebrow, title, description }) {
 }
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false)
+  const reduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll()
+  const [darkMode, setDarkMode] = useState(() => {
+    try { return localStorage.getItem('portfolio-theme') !== 'light' } catch { return true }
+  })
   const [menuOpen, setMenuOpen] = useState(false)
   const [formStatus, setFormStatus] = useState('')
   const [skillFilter, setSkillFilter] = useState('all')
 
   useEffect(() => {
     document.documentElement.dataset.theme = darkMode ? 'dark' : 'light'
+    try { localStorage.setItem('portfolio-theme', darkMode ? 'dark' : 'light') } catch { /* Storage is optional. */ }
   }, [darkMode])
 
+  useEffect(() => {
+    if (!menuOpen) return
+    const closeOnEscape = (event) => { if (event.key === 'Escape') setMenuOpen(false) }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [menuOpen])
+
   const reveal = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 24 },
     visible: {
       opacity: 1,
       y: 0,
@@ -140,6 +155,7 @@ function App() {
     ['Services', '#services'],
     ['Skills', '#skills'],
     ['Projects', '#projects'],
+    ['Lab', '#visual-lab'],
     ['Contact', '#contact'],
   ]
   const advancedSkills = skills.filter((skill) => skill.level === 'Advanced')
@@ -154,14 +170,18 @@ function App() {
         )
 
   return (
+    <MotionConfig reducedMotion="user">
+    <LazyMotion features={loadMotionFeatures} strict>
     <div className="portfolio">
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <header className="site-header">
-        <a href="#home" className="brand" aria-label="Go to homepage">
+        <a href="#home" className="brand" aria-label="Sameer homepage">
           <span className="brand-mark">&#123;$&#125;</span>
           <span className="brand-name">Sameer<span className="brand-dot"></span></span>
         </a>
 
-        <nav className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
+        <nav id="primary-navigation" aria-label="Primary navigation" className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
           {navLinks.map(([label, href]) => (
             <a
               key={label}
@@ -191,6 +211,8 @@ function App() {
             className="icon-button menu-toggle"
             type="button"
             onClick={() => setMenuOpen((current) => !current)}
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
             aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
           >
             {menuOpen ? <X size={21} /> : <Menu size={21} />}
@@ -198,7 +220,7 @@ function App() {
         </div>
       </header>
 
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <section className="hero hero-cinematic" id="home">
           <div className="hero-topline">
             <div className="availability">
@@ -210,13 +232,13 @@ function App() {
 
           <motion.div
             className="hero-visual"
-            initial={{ opacity: 0, y: 24 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
           >
             <h1 className="hero-display-name">SAMEER</h1>
             <div className="hero-portrait">
-              <img src={portraitImage} alt="Sameer" className="hero-image" />
+              <img src={portraitImage} alt="Sameer" className="hero-image" fetchPriority="high" width="800" height="1000" />
             </div>
           </motion.div>
 
@@ -240,11 +262,8 @@ function App() {
               </div>
 
               <div className="social-links">
-                <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
+                <a href="https://github.com/SameerRajput007" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
                   <Code2 size={19} />
-                </a>
-                <a href="https://linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn">
-                  <span className="linkedin-mark" aria-hidden="true">in</span>
                 </a>
                 <a href="mailto:sameerrajput493@gmail.com" aria-label="Email" data-tooltip="Email">
                   <Mail size={19} />
@@ -276,7 +295,7 @@ function App() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="about-image-wrap">
-              <img src={portraitImage} alt="Sameer profile" />
+              <img src={portraitImage} alt="Sameer profile" loading="lazy" decoding="async" />
               <div className="image-caption">
                 <span className="caption-line" />
                 <span>Developer in progress</span>
@@ -394,6 +413,8 @@ function App() {
 
             <motion.article
               className="skills-panel skills-proficiency"
+              tabIndex={0}
+              aria-label="Skill proficiency"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -433,6 +454,8 @@ function App() {
 
             <motion.article
               className="skills-panel skills-stack"
+              tabIndex={0}
+              aria-label="Core technology stack"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -547,11 +570,11 @@ function App() {
                 transition={{ delay: index * 0.08 }}
               >
                 <div className="project-image">
-                  <img src={project.image} alt={project.title} />
+                  <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
                   <span className="project-index">0{index + 1}</span>
                   <a
                     href={project.link}
-                    target="_blank"
+                    target={project.link.startsWith('https:') ? '_blank' : undefined}
                     rel="noreferrer"
                     className="project-open"
                     aria-label={`Open ${project.title}`}
@@ -568,7 +591,7 @@ function App() {
                   <div className="project-tags">
                     {project.tags.map((tag) => <span key={tag}>{formatTechLabel(tag)}</span>)}
                   </div>
-                  <a href={project.link} target="_blank" rel="noreferrer" className="text-link">
+                  <a href={project.link} target={project.link.startsWith('https:') ? '_blank' : undefined} rel="noreferrer" className="text-link">
                     View project <ArrowRight size={16} />
                   </a>
                 </div>
@@ -576,6 +599,8 @@ function App() {
             ))}
           </div>
         </section>
+
+        <VisualLab />
 
         <section className="todo-section section-wrap section-space" id="playground">
           <div className="todo-section-heading">
@@ -595,6 +620,14 @@ function App() {
             </p>
           </div>
           <TodoList />
+        </section>
+
+        <section className="portfolio-faq section-wrap section-space" aria-labelledby="faq-title">
+          <span className="eyebrow">{'{ A FEW USEFUL ANSWERS }'}</span>
+          <h2 id="faq-title">Before we say hello.</h2>
+          <details><summary>What does Sameer build?</summary><p>I build responsive frontend interfaces with React, JavaScript, HTML, and CSS, with a focus on clear layouts and thoughtful interactions.</p></details>
+          <details><summary>Can I try the projects on this page?</summary><p>Yes. The task-list demo lets you add, complete, filter, and remove tasks. The visual lab lets you explore portrait effects and layered views. Demo tasks reset when you reload.</p></details>
+          <details><summary>How can I get in touch?</summary><p>Email <a href="mailto:sameerrajput493@gmail.com">sameerrajput493@gmail.com</a>, or use the form below to prepare a message in your email app. The website does not send or store your message.</p></details>
         </section>
 
         <section className="resume-banner section-wrap">
@@ -633,7 +666,7 @@ function App() {
               </a>
 
               <a
-                href="https://github.com/"
+                href="https://github.com/SameerRajput007"
                 target="_blank"
                 rel="noreferrer"
                 className="contact-method"
@@ -647,7 +680,8 @@ function App() {
               </a>
             </div>
 
-            <form className="contact-form" onSubmit={handleContactSubmit}>
+            <form className="contact-form inquiry-ticket" onSubmit={handleContactSubmit}>
+              <div className="ticket-top"><span>LET’S MAKE SOMETHING</span><span>SR / INQUIRY</span></div>
               <label htmlFor="contact-name">Your name</label>
               <div className="contact-field">
                 <input
@@ -702,11 +736,8 @@ function App() {
         <p>Designed and built with care.</p>
 
         <div className="footer-socials">
-          <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
+          <a href="https://github.com/SameerRajput007" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
             <Code2 size={18} />
-          </a>
-          <a href="https://linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn">
-            <span className="linkedin-mark" aria-hidden="true">in</span>
           </a>
           <a href="mailto:sameerrajput493@gmail.com" aria-label="Email" data-tooltip="Email">
             <Mail size={18} />
@@ -716,6 +747,8 @@ function App() {
         <span className="copyright">© {new Date().getFullYear()} Sameer</span>
       </footer>
     </div>
+    </LazyMotion>
+    </MotionConfig>
   )
 }
 
