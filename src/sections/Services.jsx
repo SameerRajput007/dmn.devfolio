@@ -1,5 +1,5 @@
 import { Code2, Palette, Smartphone, ArrowRight } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import SectionHeading from '../components/SectionHeading.jsx'
 import revealVariants from './revealVariants.js'
 

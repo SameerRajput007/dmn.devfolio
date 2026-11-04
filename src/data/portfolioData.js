@@ -8,7 +8,7 @@ export const projects = [
     description:
       'A personal portfolio to showcase my skills, projects, and experience with a responsive layout.',
     tags: ['React', 'CSS', 'JavaScript'],
-    link: null, // TODO: paste your portfolio's GitHub repo URL
+    link: 'https://github.com/SameerRajput007/dmn.devfolio',
     image: portraitImage,
   },
   {
@@ -21,12 +21,12 @@ export const projects = [
     image: ghostImage,
   },
   {
-    title: 'Creative UI Design',
+    title: 'Interaction Lab',
     category: 'UI Development',
     description:
-      'An exploration of modern interfaces, clean typography, and responsive design patterns.',
+      'An interactive portrait study exploring particles, visual treatments, and layered interfaces.',
     tags: ['HTML', 'CSS', 'Responsive'],
-    link: null, // TODO: add repo/demo URL, and a unique image
+    link: '#visual-lab',
     image: ghostImage,
   },
 ]
