@@ -12,4 +12,4 @@
 
 ## Repository synchronization
 
-The VS Code project uses SameerRajput007/dmn.devfolio. The user confirmed Vercel deploys SameerRajput007/dmn.devfolio21. Their local refactor was preserved as commit 337e3d1 on backup/local-portfolio in dmn.devfolio. The integration ports the cloud features into that refactor; the two main branches receive the same integrated source. Do not overwrite the refactor with the earlier monolithic App.jsx.
+The VS Code project uses SameerRajput007/dmn.devfolio. The user confirmed Vercel deploys SameerRajput007/dmn.devfolio21. Their local refactor was preserved as commit 337e3d1 on backup/local-portfolio in dmn.devfolio. The integration ports the cloud features into that refactor; dmn.devfolio21/main received the integrated source. The cloud session was denied write access to dmn.devfolio; the Mac owner must pull the integration and push it to their usual origin using the steps in docs/LOCAL-SYNC.md. Do not overwrite the refactor with the earlier monolithic App.jsx.
