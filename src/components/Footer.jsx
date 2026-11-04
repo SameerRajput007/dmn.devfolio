@@ -1,27 +1,28 @@
-import './Footer.css'
+import { Code2, Mail } from 'lucide-react'
 
 function Footer() {
-  const year = new Date().getFullYear()
-
   return (
-    <footer className="site-footer" id="contact">
-      <div className="site-footer__inner">
-        <div className="site-footer__intro">
-          <a className="site-footer__brand" href="#home">
-            Sameer Singh Rajput<span aria-hidden="true">.</span>
-          </a>
-          <p>Junior Web Developer</p>
-        </div>
+    <footer className="site-footer">
+      <a href="#home" className="brand">
+        <span className="brand-mark">&#123;$&#125;</span>
+        <span className="brand-name">Sameer<span className="brand-dot"></span></span>
+      </a>
 
-        <a className="site-footer__back-to-top" href="#home">
-          Back to top <span aria-hidden="true">↑</span>
+      <p>Designed and built by self.</p>
+
+      <div className="footer-socials">
+        <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
+          <Code2 size={18} />
         </a>
-
-        <div className="site-footer__bottom">
-          <p>© {year} Sameer Singh Rajput. All rights reserved.</p>
-          <p>Made with care and React.</p>
-        </div>
+        <a href="https://linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn">
+          <span className="linkedin-mark" aria-hidden="true">in</span>
+        </a>
+        <a href="mailto:sameerrajput493@gmail.com" aria-label="Email" data-tooltip="Email">
+          <Mail size={18} />
+        </a>
       </div>
+
+      <span className="copyright">© {new Date().getFullYear()} Sameer</span>
     </footer>
   )
 }

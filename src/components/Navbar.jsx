@@ -1,57 +1,69 @@
-import { useState } from 'react'
-import './Navbar.css'
+import { ArrowRight, Menu, Moon, Sun, X } from 'lucide-react'
 
-const links = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact', href: '#contact' },
+const navLinks = [
+  ['About', '#about'],
+  ['Services', '#services'],
+  ['Skills', '#skills'],
+  ['Projects', '#projects'],
+  ['Contact', '#contact'],
 ]
 
-function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  const closeMenu = () => setMenuOpen(false)
-
+function Navbar({
+  menuOpen,
+  onToggleMenu,
+  onCloseMenu,
+  darkMode,
+  onToggleTheme,
+  activeSection,
+  scrolled,
+}) {
   return (
-    <header className="site-header">
-      <nav className="navbar" aria-label="Main navigation">
-        <a className="navbar__brand" href="#home" onClick={closeMenu}>
-          <span className="navbar__brand-mark" aria-hidden="true">S</span>
-          <span>Sam<span className="navbar__brand-dot">.</span></span>
-        </a>
+    <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
+      <a href="#home" className="brand" aria-label="Go to homepage">
+        <span className="brand-mark">&#123;$&#125;</span>
+        <span className="brand-name">Sameer<span className="brand-dot"></span></span>
+      </a>
 
+      <nav className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
+        {navLinks.map(([label, href]) => (
+          <a
+            key={label}
+            href={href}
+            className={activeSection === href.slice(1) ? 'is-active' : ''}
+            aria-current={activeSection === href.slice(1) ? 'true' : undefined}
+            onClick={onCloseMenu}
+          >
+            {label}
+          </a>
+        ))}
+        <a className="nav-contact" href="#contact" onClick={onCloseMenu}>
+          Let&apos;s talk <ArrowRight size={15} />
+        </a>
+      </nav>
+
+      <div className="header-actions">
         <button
-          className="navbar__toggle"
+          className="icon-button theme-toggle"
           type="button"
-          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={menuOpen}
-          aria-controls="navbar-links"
-          onClick={() => setMenuOpen((open) => !open)}
+          onClick={onToggleTheme}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={darkMode ? 'Light mode' : 'Dark mode'}
         >
-          <span />
-          <span />
-          <span />
+          {darkMode ? <Sun size={19} /> : <Moon size={19} />}
         </button>
 
-        <div
-          className={`navbar__content${menuOpen ? ' navbar__content--open' : ''}`}
-          id="navbar-links"
+        <button
+          className="icon-button menu-toggle"
+          type="button"
+          onClick={onToggleMenu}
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={menuOpen}
         >
-          <ul className="navbar__links">
-            {links.map(({ label, href }) => (
-              <li key={label}>
-                <a href={href} onClick={closeMenu}>{label}</a>
-              </li>
-            ))}
-          </ul>
-          <a className="navbar__cta" href="#contact" onClick={closeMenu}>
-            Let&apos;s talk <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-      </nav>
+          {menuOpen ? <X size={21} /> : <Menu size={21} />}
+        </button>
+      </div>
     </header>
   )
 }
 
-export default Navbar;
+export default Navbar
