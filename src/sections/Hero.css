@@ -1,0 +1,83 @@
+/* The sky is contained in the hero so the remaining sections keep their own backdrop. */
+#home.hero-angel {
+  background: #abd9f0;
+  color: #14384e;
+  --text: #14384e;
+  --muted: #365a70;
+  --border: rgba(26, 77, 105, .22);
+  --surface: rgba(244, 251, 255, .76);
+}
+#home.hero-angel::after { display: none; }
+#home .angel-scene { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+#home .angel-sky { position: absolute; inset: -4%; width: 108%; height: 108%; max-width: none; object-fit: cover; object-position: 65% 48%; }
+#home .angel-sky-wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(224,244,255,.9), rgba(222,242,254,.4) 38%, transparent 65%), linear-gradient(0deg, rgba(226,243,251,.94), transparent 40%); }
+#home .angel-clouds { position: absolute; inset: -15%; opacity: .45; background: radial-gradient(ellipse at 15% 75%, #fff 0, transparent 27%), radial-gradient(ellipse at 80% 85%, #fff 0, transparent 24%); animation: angel-cloud-drift var(--sky-duration) ease-in-out infinite alternate; animation-play-state: var(--sky-play); }
+#home .angel-clouds-near { opacity: .35; filter: blur(18px); animation-direction: alternate-reverse; background: radial-gradient(ellipse at 65% 100%, #fff 0, transparent 40%); }
+#home .hero-visual { inset: 105px max(24px, calc((100vw - 1240px) / 2)) auto; display: block; }
+#root .portfolio #home .hero-display-name { position: relative; top: auto; left: auto; padding: 0; width: fit-content; transform: none; text-align: left; font-size: clamp(70px, 12vw, 170px); letter-spacing: -.07em; color: #153e58; line-height: 1; text-shadow: 0 2px 30px rgba(255,255,255,.4); }
+#home .hero-bottomline { align-items: flex-start; }
+#home .hero-copy { max-width: 390px; }
+#home .hero-description { color: #244d65; }
+#home .hero-cta { padding: 18px; border-radius: 20px; background: rgba(235,247,255,.78); border: 1px solid rgba(255,255,255,.7); backdrop-filter: blur(12px); }
+#home .button-secondary { background: rgba(255,255,255,.65); color: #173d55; }
+#home .sky-motion-control { position: absolute; bottom: 25px; right: max(24px, calc((100vw - 1240px) / 2)); z-index: 5; display: flex; align-items: center; gap: 12px; font-size: 9px; letter-spacing: 1.8px; }
+#home .sky-motion-control input { width: 90px; accent-color: #286589; cursor: pointer; }
+#home .scroll-cue { color: #244d65; }
+@keyframes angel-cloud-drift { from { transform: translate3d(-3%, 0, 0); } to { transform: translate3d(5%, -3%, 0); } }
+@media (max-width: 700px) {
+  #home.hero-angel { min-height: 880px; }
+  #home .angel-sky { object-position: 62% center; }
+  #home .angel-sky-wash { background: linear-gradient(0deg, rgba(230,246,255,.98), rgba(230,246,255,.7) 30%, transparent 65%), linear-gradient(90deg, rgba(226,244,255,.5), transparent); }
+  #home .hero-visual { top: 120px; }
+  #home .hero-bottomline { flex-direction: column; gap: 20px; bottom: 110px; }
+  #home .hero-cta { align-items: flex-start; padding: 12px; }
+  #home .sky-motion-control { bottom: 24px; }
+  #home .scroll-cue { bottom: 65px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #home .angel-clouds { animation: none; }
+}
+
+/* Night scene follows the existing theme toggle. */
+:root[data-theme='dark'] #home.hero-angel {
+  background: #060e20;
+  color: #e4f1ff;
+  --text: #e4f1ff;
+  --muted: #b0c5df;
+  --border: rgba(172, 202, 238, .22);
+  --surface: rgba(13, 27, 49, .8);
+}
+:root[data-theme='dark'] #home .angel-sky-wash {
+  background: linear-gradient(90deg, rgba(4,12,28,.88), rgba(4,12,28,.35) 38%, transparent 65%), linear-gradient(0deg, rgba(5,13,29,.95), transparent 45%);
+}
+:root[data-theme='dark'] #home .angel-clouds { opacity: .09; }
+:root[data-theme='dark'] #root .portfolio #home .hero-display-name {
+  color: #e0eeff;
+  text-shadow: 0 0 35px rgba(164,201,255,.16);
+}
+:root[data-theme='dark'] #home .hero-description,
+:root[data-theme='dark'] #home .scroll-cue { color: #b9cee6; }
+:root[data-theme='dark'] #home .hero-cta {
+  background: rgba(10,24,46,.8);
+  border-color: rgba(174,206,246,.2);
+}
+:root[data-theme='dark'] #home .button-secondary { background: rgba(26,45,73,.8); color: #e4f1ff; }
+:root[data-theme='dark'] #home .sky-motion-control input { accent-color: #b5d8ff; }
+@media (max-width: 700px) {
+  :root[data-theme='dark'] #home .angel-sky-wash {
+    background: linear-gradient(0deg, rgba(5,13,29,.98), rgba(5,13,29,.75) 30%, transparent 65%), linear-gradient(90deg, rgba(5,13,29,.5), transparent);
+  }
+}
+#root .portfolio #home .hero-description { color: #244d65; }
+:root[data-theme='dark'] #root .portfolio #home .hero-description { color: #b9cee6; }
+
+#home .hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+#home.has-particles .angel-sky { opacity: 0; }
+#root .portfolio #home.has-particles .hero-display-name { opacity: var(--particle-name, 1); }
+/* Keep the point-cloud silhouette crisp against a quiet atmospheric sky. */
+#home.has-particles .angel-clouds { opacity: .12; }
+:root[data-theme='dark'] #home.has-particles .angel-clouds { opacity: .025; }
+#home .hero-particles { filter: drop-shadow(0 0 2px rgba(55, 178, 255, .35)); }
+@media (prefers-reduced-motion: reduce) {
+  #root .portfolio #home.has-particles .hero-display-name { opacity: 1; }
+}

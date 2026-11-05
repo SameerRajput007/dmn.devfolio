@@ -146,7 +146,7 @@ function App() {
       />
 
       <main id="main" tabIndex={-1}>
-        <Hero role={roles[roleIndex]} />
+        <Hero role={roles[roleIndex]} darkMode={darkMode} />
         <About />
 
         <Services />
