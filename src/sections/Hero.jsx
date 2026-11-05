@@ -13,9 +13,7 @@ function Hero({ role, darkMode }) {
   const [intensity, setIntensity] = useState(45)
   const reduceMotion = useReducedMotion()
   return (
-    <section className="hero hero-cinematic hero-sticker" id="home"
-      onPointerMove={moveSky} onPointerLeave={resetSky}
-      style={{ '--sky-duration': `${65 - intensity * 0.4}s`, '--sky-play': intensity === 0 ? 'paused' : 'running' }}>
+    <section className="hero hero-cinematic hero-sticker" id="home">
       <HeroImageTrail intensity={intensity} reducedMotion={reduceMotion} />
       <div className="hero-topline">
         <div className="availability">
