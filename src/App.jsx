@@ -5,6 +5,7 @@ import { projects, roles, skills } from './data/portfolioData.js'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import Hero from './sections/Hero.jsx'
+import AvatarAssistant from './components/AvatarAssistant.jsx'
 import About from './sections/About.jsx'
 import Services from './sections/Services.jsx'
 import Skills from './sections/Skills.jsx'
@@ -147,6 +148,7 @@ function App() {
 
       <main id="main" tabIndex={-1}>
         <Hero role={roles[roleIndex]} darkMode={darkMode} />
+        <div className="section-wrap"><AvatarAssistant /></div>
         <About />
 
         <Services />
