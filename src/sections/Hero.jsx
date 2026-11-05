@@ -4,17 +4,11 @@ import {
   Code2,
   Mail,
 } from 'lucide-react'
-import { useState } from 'react'
-import { m as motion, useReducedMotion } from 'framer-motion'
-import HeroImageTrail from './HeroImageTrail.jsx'
 import './Hero.css'
 
 function Hero({ role, darkMode }) {
-  const [intensity, setIntensity] = useState(45)
-  const reduceMotion = useReducedMotion()
   return (
-    <section className="hero hero-cinematic hero-sticker" id="home">
-      <HeroImageTrail intensity={intensity} reducedMotion={reduceMotion} />
+    <section className="hero hero-contained" id="home">
       <div className="hero-topline">
         <div className="availability">
           <span className="availability-dot" />
@@ -23,15 +17,12 @@ function Hero({ role, darkMode }) {
         <span className="hero-edition">PORTFOLIO / FRONTEND DEVELOPER</span>
       </div>
 
-      <motion.div
-        className="hero-visual"
-        initial={false}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.15 }}
-      >
-        <h1 className="hero-display-name">SAMEER</h1>
-
-      </motion.div>
+      <div className="hero-avatar-stage" aria-label="3D avatar introduction area">
+        <video className="hero-avatar-video" controls playsInline preload="metadata" poster="/avatar-poster.jpg">
+          <source src="/avatar-intro.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-avatar-caption">3D AVATAR INTRODUCTION · VIDEO IN PRODUCTION</div>
+      </div>
 
       <div className="hero-bottomline">
         <div className="hero-copy">
@@ -67,12 +58,6 @@ function Hero({ role, darkMode }) {
         </div>
       </div>
 
-      <label className="sky-motion-control">
-        <span>TRAIL MOTION</span>
-        <input type="range" min="0" max="100" value={intensity}
-          aria-label="Trail motion intensity" 
-          onChange={event => setIntensity(Number(event.target.value))} />
-      </label>
       <a href="#about" className="scroll-cue">
         <span>&#123; SCROLL TO DISCOVER &#125;</span>
         <ArrowDown size={16} />
