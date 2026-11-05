@@ -70,7 +70,7 @@ function Hero({ role, darkMode }) {
       <label className="sky-motion-control">
         <span>TRAIL MOTION</span>
         <input type="range" min="0" max="100" value={intensity}
-          aria-label="Trail motion intensity" disabled={reduceMotion}
+          aria-label="Trail motion intensity" 
           onChange={event => setIntensity(Number(event.target.value))} />
       </label>
       <a href="#about" className="scroll-cue">
