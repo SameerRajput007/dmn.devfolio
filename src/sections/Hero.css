@@ -27,3 +27,7 @@
 
 #home.hero-sticker .hero-image-trail { display:block; visibility:visible; }
 #home.hero-sticker .hero-sticker-item { z-index: 1; }
+
+/* More tactile, layered sticker treatment. */
+#home.hero-sticker .hero-sticker-item { transform-origin:center; filter:drop-shadow(0 12px 8px rgba(0,0,0,.19)) drop-shadow(0 2px 1px rgba(0,0,0,.12)); animation-duration:1.85s; }
+#home.hero-sticker .hero-sticker-item svg { overflow:visible; }
