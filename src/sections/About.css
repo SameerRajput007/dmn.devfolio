@@ -16,3 +16,14 @@
 #about .about-premium-copy .text-link:hover { gap:17px; }
 @media(max-width:760px){#about .about-premium-grid{gap:34px}#about .about-premium-copy h3{font-size:clamp(2rem,8vw,3.4rem)}#about .about-premium-image{border-radius:20px}}
 @media(prefers-reduced-motion:reduce){#about .about-premium-image img,#about .about-premium-copy .text-link{transition:none}}
+
+/* Existing premium cursor stickers, now scoped to About. */
+#about.about-sticker { overflow:hidden; isolation:isolate; }
+#about.about-sticker > :not(.hero-image-trail) { position:relative; z-index:2; }
+#about.about-sticker .hero-image-trail { position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none; }
+#about.about-sticker .hero-sticker-item { position:absolute; width:var(--sticker-size); height:var(--sticker-size); pointer-events:none; will-change:opacity,transform; animation:about-sticker-pop 1.85s cubic-bezier(.2,.75,.3,1) both; filter:drop-shadow(0 12px 8px rgba(0,0,0,.19)); }
+#about.about-sticker .hero-sticker-item svg { display:block; width:100%; height:100%; overflow:visible; }
+@keyframes about-sticker-pop { 0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--sticker-angle)) scale(.65)} 12%{opacity:1;transform:translate(-50%,-50%) rotate(var(--sticker-angle)) scale(1.08)} 75%{opacity:1} 100%{opacity:0;transform:translate(-50%,-95%) rotate(calc(var(--sticker-angle) + 12deg)) scale(.92)} }
+#about.about-sticker .about-trail-control { display:flex; align-items:center; justify-content:flex-end; gap:12px; margin-top:24px; font-size:10px; letter-spacing:.15em; }
+#about.about-sticker .about-trail-control input { width:110px; accent-color:#ef6547; cursor:pointer; }
+@media(hover:none){#about.about-sticker .hero-image-trail{display:none}}
