@@ -72,10 +72,6 @@
 :root[data-theme='dark'] #root .portfolio #home .hero-description { color: #b9cee6; }
 
 
-#root .portfolio /* Keep the point-cloud silhouette crisp against a quiet atmospheric sky. */
-:root[data-theme='dark'] 
-@media (prefers-reduced-motion: reduce) {
-  #root .portfolio }
 
 /* Cursor-following image trail, contained behind the hero content. */
 #home .hero-image-trail { position: absolute; inset: 0; overflow: hidden; z-index: 1; pointer-events: none; }
