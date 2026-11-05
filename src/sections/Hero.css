@@ -3,9 +3,16 @@
 #home.hero-contained .hero-topline, #home.hero-contained .hero-bottomline, #home.hero-contained .scroll-cue { position:relative; inset:auto; transform:none; width:100%; max-width:none; z-index:2; }
 #home.hero-contained .hero-avatar-stage { position:relative; width:100%; max-width:960px; margin:auto; aspect-ratio:16/9; border-radius:20px; overflow:hidden; background:linear-gradient(135deg,#17191d,#252327 60%,#9b4e30); box-shadow:0 20px 55px rgba(0,0,0,.18); }
 #home.hero-contained .hero-avatar-video { display:block; width:100%; height:100%; object-fit:contain; }
-#home.hero-contained .hero-avatar-caption { position:absolute; top:16px; left:16px; padding:9px 12px; font-size:10px; letter-spacing:.12em; border-radius:999px; background:rgba(0,0,0,.72); color:#fff; pointer-events:none; }
+
 #home.hero-contained .hero-bottomline { display:flex; align-items:flex-start; justify-content:space-between; gap:28px; }
 #home.hero-contained .hero-copy { max-width:520px; }
 #home.hero-contained .hero-cta { flex-shrink:0; }
 #home.hero-contained .scroll-cue { display:inline-flex; align-items:center; gap:10px; width:fit-content; }
 @media(max-width:760px){#home.hero-contained{width:calc(100% - 24px);margin:12px auto 30px;padding:20px;gap:22px;border-radius:20px}#home.hero-contained .hero-bottomline{flex-direction:column}#home.hero-contained .hero-cta{width:100%}#home.hero-contained .hero-avatar-stage{border-radius:14px}}
+
+#home.hero-contained .hero-avatar-pending { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:24px; text-align:center; color:#f8f5f1; background:linear-gradient(120deg,#15171c,#28252b 65%,#8d4b32); }
+#home.hero-contained .hero-avatar-pending span { font-size:11px; letter-spacing:.2em; color:#f5a67f; }
+#home.hero-contained .hero-avatar-pending strong { font-size:clamp(1.4rem,3vw,2.8rem); }
+#home.hero-contained .hero-avatar-pending p { max-width:44ch; font-size:clamp(.85rem,1.4vw,1rem); line-height:1.6; }
+#home.hero-contained .hero-sound-toggle { position:absolute; bottom:18px; right:18px; z-index:3; display:flex; align-items:center; gap:9px; border:1px solid rgba(255,255,255,.35); background:rgba(12,13,16,.76); color:#fff; padding:10px 14px; border-radius:999px; cursor:pointer; backdrop-filter:blur(8px); }
+#home.hero-contained .hero-sound-toggle:focus-visible { outline:3px solid #f68b5e; outline-offset:3px; }
