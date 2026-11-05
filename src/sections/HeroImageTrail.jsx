@@ -20,8 +20,8 @@ export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
     if (!hero) return
     const active = new Set()
     let lastX = -1000, lastY = -1000, lastAt = 0, index = 0
-    const spacing = Math.max(16, 35 - intensity * .15)
-    const interval = Math.max(20, 65 - intensity * .35)
+    const spacing = Math.max(10, 26 - intensity * .13)
+    const interval = Math.max(16, 45 - intensity * .22)
     function move(event) {
       if (event.pointerType === 'touch' || event.pointerType === 'pen') return
       const rect = hero.getBoundingClientRect()
@@ -30,13 +30,13 @@ export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
       const now = performance.now()
       if (now - lastAt < interval || Math.hypot(x-lastX,y-lastY) < spacing) return
       lastX=x;lastY=y;lastAt=now
-      if (active.size >= 8) { const old=active.values().next().value;old.remove();active.delete(old) }
+      if (active.size >= 13) { const old=active.values().next().value;old.remove();active.delete(old) }
       const item=document.createElement('span')
       item.className='hero-sticker-item'
       item.innerHTML=stickers[index % stickers.length]
       item.style.left=x+'px';item.style.top=y+'px'
-      item.style.setProperty('--sticker-angle', (((index*47)%70)-35)+'deg')
-      item.style.setProperty('--sticker-size', (90+(index%3)*20)+'px')
+      item.style.setProperty('--sticker-angle', (((index*59)%100)-50)+'deg')
+      item.style.setProperty('--sticker-size', (125+(index%4)*20)+'px')
       index++
       layer.appendChild(item);active.add(item)
       item.addEventListener('animationend',()=>{item.remove();active.delete(item)},{once:true})
