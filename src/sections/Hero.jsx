@@ -3,10 +3,24 @@ import {
   ArrowRight,
   Code2,
   Mail,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
+import { useRef, useState } from 'react'
 import './Hero.css'
 
 function Hero({ role, darkMode }) {
+  const videoRef = useRef(null)
+  const [soundOn, setSoundOn] = useState(false)
+  const [videoReady, setVideoReady] = useState(false)
+  const toggleSound = () => {
+    const video = videoRef.current
+    if (!video || !videoReady) return
+    const next = !soundOn
+    video.muted = !next
+    setSoundOn(next)
+    if (video.paused) video.play().catch(() => {})
+  }
   return (
     <section className="hero hero-contained" id="home">
       <div className="hero-topline">
@@ -17,11 +31,36 @@ function Hero({ role, darkMode }) {
         <span className="hero-edition">PORTFOLIO / FRONTEND DEVELOPER</span>
       </div>
 
-      <div className="hero-avatar-stage" aria-label="3D avatar introduction area">
-        <video className="hero-avatar-video" controls playsInline preload="metadata" poster="/avatar-poster.jpg">
+      <div className="hero-avatar-stage" aria-label="Animated avatar introduction">
+        <video
+          ref={videoRef}
+          className="hero-avatar-video"
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="metadata"
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => setVideoReady(false)}
+          aria-label="Animated developer avatar introduction"
+        >
           <source src="/avatar-intro.mp4" type="video/mp4" />
         </video>
-        <div className="hero-avatar-caption">3D AVATAR INTRODUCTION · VIDEO IN PRODUCTION</div>
+        {!videoReady && (
+          <div className="hero-avatar-pending" role="status">
+            <span>3D AVATAR INTRODUCTION</span>
+            <strong>Animation in production</strong>
+            <p>Your animated character will walk in from the left toward the developer workspace on the right.</p>
+          </div>
+        )}
+        {videoReady && (
+          <button type="button" className="hero-sound-toggle" onClick={toggleSound}
+            aria-label={soundOn ? 'Mute avatar narration' : 'Enable avatar narration'}
+            aria-pressed={soundOn}>
+            {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            {soundOn ? 'Sound on' : 'Sound off'}
+          </button>
+        )}
       </div>
 
       <div className="hero-bottomline">
