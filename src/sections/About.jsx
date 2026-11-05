@@ -3,6 +3,7 @@ import { m as motion } from 'framer-motion'
 import portraitImage from '../assets/portrait.jpg'
 import SectionHeading from '../components/SectionHeading.jsx'
 import revealVariants from './revealVariants.js'
+import './About.css'
 
 function About() {
   return (
@@ -14,13 +15,13 @@ function About() {
       />
 
       <motion.div
-        className="about-grid"
+        className="about-grid about-premium-grid"
         variants={revealVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        <div className="about-image-wrap">
+        <div className="about-image-wrap about-premium-image">
           <img src={portraitImage} alt="Sameer profile" loading="lazy" decoding="async" />
           <div className="image-caption">
             <span className="caption-line" />
@@ -28,8 +29,9 @@ function About() {
           </div>
         </div>
 
-        <div className="about-copy">
+        <div className="about-copy about-premium-copy">
           <span className="small-label">&#123; WHO I AM &#125;</span>
+          <span className="about-premium-kicker">DESIGN MINDED / CODE DRIVEN</span>
           <h3>
             Turning ideas into
             <span className="gradient-text"> interactive reality.</span>
