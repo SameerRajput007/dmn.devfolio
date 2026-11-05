@@ -4,17 +4,12 @@ import {
   Code2,
   Mail,
 } from 'lucide-react'
-import { useState } from 'react'
-import { m as motion, useReducedMotion } from 'framer-motion'
-import HeroImageTrail from './HeroImageTrail.jsx'
+import { m as motion } from 'framer-motion'
 import './Hero.css'
 
 function Hero({ role, darkMode }) {
-  const [intensity, setIntensity] = useState(45)
-  const reduceMotion = useReducedMotion()
   return (
-    <section className="hero hero-cinematic hero-sticker" id="home">
-      <HeroImageTrail intensity={intensity} reducedMotion={reduceMotion} />
+    <section className="hero hero-cinematic hero-avatar-ready" id="home">
       <div className="hero-topline">
         <div className="availability">
           <span className="availability-dot" />
@@ -67,12 +62,6 @@ function Hero({ role, darkMode }) {
         </div>
       </div>
 
-      <label className="sky-motion-control">
-        <span>TRAIL MOTION</span>
-        <input type="range" min="0" max="100" value={intensity}
-          aria-label="Trail motion intensity" 
-          onChange={event => setIntensity(Number(event.target.value))} />
-      </label>
       <a href="#about" className="scroll-cue">
         <span>&#123; SCROLL TO DISCOVER &#125;</span>
         <ArrowDown size={16} />
