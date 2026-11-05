@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { m as motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
 import angelSky from '../assets/angel-day-light.png'
 import angelNight from '../assets/angel-night-light.png'
-import HeroParticles from './HeroParticles.jsx'
+import HeroImageTrail from './HeroImageTrail.jsx'
 import './Hero.css'
 
 function Hero({ role, darkMode }) {
@@ -42,8 +42,7 @@ function Hero({ role, darkMode }) {
         <div className="angel-clouds angel-clouds-near" />
         <div className="angel-sky-wash" />
       </div>
-      <HeroParticles image={darkMode ? angelNight : angelSky} darkMode={darkMode}
-        intensity={intensity} reducedMotion={reduceMotion} />
+      <HeroImageTrail images={[angelSky, angelNight]} intensity={intensity} reducedMotion={reduceMotion} />
       <div className="hero-topline">
         <div className="availability">
           <span className="availability-dot" />
