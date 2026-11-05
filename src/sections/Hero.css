@@ -20,7 +20,10 @@
 :root[data-theme='dark'] #home.hero-sticker .hero-cta { background: rgba(26,27,31,.88); border-color: rgba(255,255,255,.17); }
 :root[data-theme='dark'] #home.hero-sticker .button-secondary { background: #272930; color: #f7f7f7; }
 @media (max-width:700px) { #home.hero-sticker { min-height: 880px; } #home.hero-sticker .hero-visual { top: 120px; } #home.hero-sticker .hero-bottomline { flex-direction: column; gap: 20px; bottom: 110px; } #home.hero-sticker .hero-cta { padding: 12px; } #home.hero-sticker .sky-motion-control { bottom: 24px; } #home.hero-sticker .scroll-cue { bottom: 65px; } }
-@media (hover:none), (prefers-reduced-motion:reduce) { #home.hero-sticker .hero-image-trail { display:none; } }
+@media (hover:none) { #home.hero-sticker .hero-image-trail { display:none; } }
 
 #home.hero-sticker .hero-sticker-item { display: block; }
 #home.hero-sticker .hero-sticker-item svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+#home.hero-sticker .hero-image-trail { display:block; visibility:visible; }
+#home.hero-sticker .hero-sticker-item { z-index: 1; }
