@@ -9,7 +9,7 @@ const stickerArt = [
   '<svg viewBox="0 0 150 150"><path fill="#4fe088" stroke="#153e30" stroke-width="5" d="M27 50L45 21L65 35L85 13L103 37L125 28L117 65Q142 100 108 126Q74 149 37 124Q7 100 27 50Z"/><circle cx="54" cy="69" r="12" fill="#183a2b"/><circle cx="100" cy="69" r="12" fill="#183a2b"/><path d="M50 107Q77 126 103 104" fill="none" stroke="#173c2a" stroke-width="7" stroke-linecap="round"/></svg>',
   '<svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="61" fill="#ffcf4c" stroke="#28213c" stroke-width="5"/><circle cx="75" cy="75" r="46" fill="none" stroke="#28213c" stroke-width="3" stroke-dasharray="6 7"/><text x="75" y="83" text-anchor="middle" font-family="Arial" font-size="27" font-weight="900" fill="#28213c">CREATE</text></svg>'
 ]
-const stickers = stickerArt.map(svg => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg))
+const stickers = stickerArt
 
 export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
   const layerRef = useRef(null)
@@ -29,11 +29,9 @@ export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
       if (now - lastAt < interval || Math.hypot(x-lastX,y-lastY) < spacing) return
       lastX=x;lastY=y;lastAt=now
       if (active.size >= 8) { const old=active.values().next().value;old.remove();active.delete(old) }
-      const item=document.createElement('img')
+      const item=document.createElement('span')
       item.className='hero-sticker-item'
-      item.src=stickers[index % stickers.length]
-      item.alt=''
-      item.draggable=false
+      item.innerHTML=stickers[index % stickers.length]
       item.style.left=x+'px';item.style.top=y+'px'
       item.style.setProperty('--sticker-angle', (((index*47)%70)-35)+'deg')
       item.style.setProperty('--sticker-size', (90+(index%3)*20)+'px')
