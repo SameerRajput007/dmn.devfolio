@@ -11,11 +11,12 @@ function Skills({ skills, filteredSkills, skillFilter, onSkillFilterChange }) {
     <section className="skills section-wrap section-space" id="skills">
       <SectionHeading
         eyebrow="{ MY TOOLKIT }"
-        title="Skills that keep growing."
-        description="Technologies I use and continue to improve through practice."
+        title="Crafted with curiosity. Built with code."
+        description="A considered toolkit for building fast, accessible, expressive digital experiences."
       />
 
-      <div className="skills-dashboard">
+      <div className="skills-dashboard skills-dashboard--premium">
+        <div className="skills-premium-intro"><span>01 / EXPLORE THE STACK</span><span>DESIGN × DEVELOPMENT</span></div>
         <motion.article
           className="skills-panel skills-overview"
           initial={{ opacity: 0, y: 18 }}
