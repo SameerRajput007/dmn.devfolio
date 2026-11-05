@@ -15,8 +15,9 @@ export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
   const layerRef = useRef(null)
   useEffect(() => {
     const layer = layerRef.current
-    if (!layer || reducedMotion || intensity === 0) return
+    if (!layer || intensity === 0) return
     const hero = layer.closest('section')
+    if (!hero) return
     const active = new Set()
     let lastX = -1000, lastY = -1000, lastAt = 0, index = 0
     const spacing = Math.max(16, 35 - intensity * .15)
@@ -25,6 +26,7 @@ export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
       if (event.pointerType === 'touch' || event.pointerType === 'pen') return
       const rect = hero.getBoundingClientRect()
       const x = event.clientX - rect.left, y = event.clientY - rect.top
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return
       const now = performance.now()
       if (now - lastAt < interval || Math.hypot(x-lastX,y-lastY) < spacing) return
       lastX=x;lastY=y;lastAt=now
@@ -39,8 +41,8 @@ export default function HeroImageTrail({ intensity = 65, reducedMotion }) {
       layer.appendChild(item);active.add(item)
       item.addEventListener('animationend',()=>{item.remove();active.delete(item)},{once:true})
     }
-    hero.addEventListener('pointermove',move,{passive:true})
-    return ()=>{hero.removeEventListener('pointermove',move);active.forEach(item=>item.remove())}
+    window.addEventListener('pointermove',move,{passive:true})
+    return ()=>{window.removeEventListener('pointermove',move);active.forEach(item=>item.remove())}
   },[intensity,reducedMotion])
   return <div className="hero-image-trail" ref={layerRef} aria-hidden="true"/>
 }
