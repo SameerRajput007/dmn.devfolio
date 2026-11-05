@@ -80,3 +80,9 @@
 #home .hero-visual, #home .hero-bottomline, #home .scroll-cue, #home .sky-motion-control { position: absolute; }
 @keyframes hero-trail-fade { 0% { opacity: 0; transform: translate(-50%,-43%) scale(.8) rotate(var(--trail-rotation)); } 20% { opacity: .88; } 75% { opacity: .65; } 100% { opacity: 0; transform: translate(-50%,-85%) scale(1.05) rotate(var(--trail-rotation)); } }
 @media (hover: none), (prefers-reduced-motion: reduce) { #home .hero-image-trail { display: none; } }
+
+/* Emoji-and-photo trail inspired by the Skiper18 interaction. */
+#home .hero-trail-item { position: absolute; display: grid; place-items: center; width: 90px; height: 110px; pointer-events: none; transform: translate(-50%, -50%); animation: hero-trail-fade 1.15s ease-out both; will-change: transform, opacity; }
+#home .hero-trail-photo { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255,255,255,.55); box-shadow: 0 12px 35px rgba(0,0,0,.22); }
+#home .hero-trail-emoji { width: 72px; height: 72px; font-size: 46px; line-height: 1; filter: drop-shadow(0 5px 10px rgba(0,0,0,.2)); }
+@media (max-width: 700px) { #home .hero-trail-item { width: 70px; height: 86px; } #home .hero-trail-emoji { width: 60px; height: 60px; font-size: 38px; } }
