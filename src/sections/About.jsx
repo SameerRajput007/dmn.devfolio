@@ -1,4 +1,6 @@
 import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import HeroImageTrail from './HeroImageTrail.jsx'
 import { m as motion } from 'framer-motion'
 import portraitImage from '../assets/portrait.jpg'
 import SectionHeading from '../components/SectionHeading.jsx'
@@ -6,8 +8,10 @@ import revealVariants from './revealVariants.js'
 import './About.css'
 
 function About() {
+  const [intensity, setIntensity] = useState(45)
   return (
-    <section className="about section-wrap section-space" id="about">
+    <section className="about section-wrap section-space about-sticker" id="about">
+      <HeroImageTrail intensity={intensity} />
       <SectionHeading
         eyebrow="{ A LITTLE ABOUT ME }"
         title="Building with purpose."
@@ -66,6 +70,7 @@ function About() {
           </a>
         </div>
       </motion.div>
+      <label className="about-trail-control"><span>TRAIL MOTION</span><input type="range" min="0" max="100" value={intensity} aria-label="About sticker trail intensity" onChange={event => setIntensity(Number(event.target.value))} /></label>
     </section>
   )
 }
