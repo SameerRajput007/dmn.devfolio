@@ -71,13 +71,16 @@
 #root .portfolio #home .hero-description { color: #244d65; }
 :root[data-theme='dark'] #root .portfolio #home .hero-description { color: #b9cee6; }
 
-#home .hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-#home.has-particles .angel-sky { opacity: 0; }
-#root .portfolio #home.has-particles .hero-display-name { opacity: var(--particle-name, 1); }
-/* Keep the point-cloud silhouette crisp against a quiet atmospheric sky. */
-#home.has-particles .angel-clouds { opacity: .12; }
-:root[data-theme='dark'] #home.has-particles .angel-clouds { opacity: .025; }
-#home .hero-particles { filter: drop-shadow(0 0 2px rgba(55, 178, 255, .35)); }
+
+#root .portfolio /* Keep the point-cloud silhouette crisp against a quiet atmospheric sky. */
+:root[data-theme='dark'] 
 @media (prefers-reduced-motion: reduce) {
-  #root .portfolio #home.has-particles .hero-display-name { opacity: 1; }
-}
+  #root .portfolio }
+
+/* Cursor-following image trail, contained behind the hero content. */
+#home .hero-image-trail { position: absolute; inset: 0; overflow: hidden; z-index: 1; pointer-events: none; }
+#home .hero-trail-image { position: absolute; width: clamp(76px, 10vw, 140px); aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; border: 1px solid rgba(255,255,255,.5); box-shadow: 0 12px 40px rgba(0,0,0,.22); transform: translate(-50%,-50%) rotate(var(--trail-rotation)); animation: hero-trail-fade 1.1s ease-out both; pointer-events: none; }
+#home .hero-topline, #home .hero-visual, #home .hero-bottomline, #home .scroll-cue, #home .sky-motion-control { position: relative; z-index: 3; }
+#home .hero-visual, #home .hero-bottomline, #home .scroll-cue, #home .sky-motion-control { position: absolute; }
+@keyframes hero-trail-fade { 0% { opacity: 0; transform: translate(-50%,-43%) scale(.8) rotate(var(--trail-rotation)); } 20% { opacity: .88; } 75% { opacity: .65; } 100% { opacity: 0; transform: translate(-50%,-85%) scale(1.05) rotate(var(--trail-rotation)); } }
+@media (hover: none), (prefers-reduced-motion: reduce) { #home .hero-image-trail { display: none; } }
