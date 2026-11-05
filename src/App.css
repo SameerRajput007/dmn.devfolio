@@ -3121,26 +3121,3 @@ section[id] { scroll-margin-top:100px; }
 
 .hero-original-caption { display:none; }
 .lab-hero-link { text-decoration:underline; text-underline-offset:5px; }
-
-
-/* Premium Skills section refinement */
-#root .portfolio .skills-premium-intro {
-  display:flex; justify-content:space-between; align-items:center; gap:1rem;
-  margin:0 0 1.4rem; padding:0 0 .85rem;
-  border-bottom:1px solid var(--border, rgba(140,140,140,.25));
-  color:var(--muted); font-size:.69rem; font-weight:700;
-  letter-spacing:.16em; text-transform:uppercase;
-}
-#root .portfolio .skills-dashboard--premium .skills-panel {
-  transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
-}
-@media (hover:hover) and (prefers-reduced-motion:no-preference) {
-  #root .portfolio .skills-dashboard--premium .skills-panel:hover {
-    transform:translateY(-4px);
-    box-shadow:0 20px 50px rgba(0,0,0,.11);
-    border-color:var(--accent);
-  }
-}
-@media (max-width:600px) {
-  #root .portfolio .skills-premium-intro {font-size:.58rem;letter-spacing:.09em;flex-wrap:wrap;}
-}
