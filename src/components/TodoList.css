@@ -1174,3 +1174,29 @@
     border-radius: 0;
   }
 }
+
+/* Decorative globe stays behind the task controls and cannot capture input. */
+.todo-main { isolation: isolate; overflow: hidden; }
+.todo-main > .todo-globe-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  align-items: center;
+  pointer-events: none;
+  opacity: 1;
+}
+.todo-globe-background > div { width: 100%; }
+.todo-globe-background * { pointer-events: none !important; }
+:root[data-theme='light'] .todo-main > .todo-globe-background { opacity: 1; }
+.todo-main > .todo-globe-background { min-width: 0; }
+.todo-globe-background > div { min-width: 0; max-width: 100%; }
+
+/* Keep the center panel clear so its globe is visible through the task rows. */
+.todo-workspace .todo-main,
+.todo-workspace .todo-main .todo-compose,
+.todo-workspace .todo-main .todo-task {
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}

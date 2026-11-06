@@ -1,0 +1,308 @@
+
+
+import { memo, useEffect, useMemo, useRef, type MutableRefObject } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import type { Pose } from "./lib/pose";
+import { AVATAR_SCALE, SIT_Y, STAND_Y } from "./lib/layout";
+
+// Character faces local +z; the pose contract drives each articulated joint.
+const lerp = THREE.MathUtils.lerp;
+
+const COLORS = {
+  skin: "#e4ab85",
+  shirt: "#17181c",
+  pants: "#111216",
+  shoe: "#f3f0ea",
+  hair: "#17151a",
+  orange: "#e57935",
+  eye: "#ffffff",
+  iris: "#3a2214",
+};
+
+const THIGH = 0.46;
+const SHIN = 0.44;
+
+function makeCurls() {
+  let seed = 11;
+  const rnd = () => {
+    seed = (seed * 16807) % 2147483647;
+    return seed / 2147483647;
+  };
+  const out: { p: [number, number, number]; r: number }[] = [];
+  let guard = 0;
+  while (out.length < 160 && guard++ < 3500) {
+    const theta = rnd() * Math.PI * 2;
+    const y = -0.35 + rnd() * 1.35;
+    if (y > 1) continue;
+    const ring = Math.sqrt(1 - y * y);
+    const dir = new THREE.Vector3(ring * Math.sin(theta), y, ring * Math.cos(theta));
+    // keep the face clear
+    if (dir.z > 0.3 && dir.y < 0.6) continue;
+    const r = 0.028 + rnd() * 0.032;
+    dir.multiplyScalar(0.213);
+    out.push({ p: [dir.x, dir.y, dir.z], r });
+  }
+  return out;
+}
+
+function fabricTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 128;
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = '#888'; ctx.fillRect(0, 0, 128, 128);
+  for (let y = 0; y < 128; y += 2) {
+    for (let x = 0; x < 128; x += 2) {
+      ctx.fillStyle = (x + y) % 4 ? '#999' : '#777';
+      ctx.fillRect(x, y, 1, 2);
+    }
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(4, 4);
+  return texture;
+}
+
+function Avatar({ pose }: { pose: MutableRefObject<Pose> }) {
+  const pelvis = useRef<THREE.Group>(null);
+  const torso = useRef<THREE.Group>(null);
+  const head = useRef<THREE.Group>(null);
+  const shL = useRef<THREE.Group>(null);
+  const shR = useRef<THREE.Group>(null);
+  const elL = useRef<THREE.Group>(null);
+  const elR = useRef<THREE.Group>(null);
+  const hipL = useRef<THREE.Group>(null);
+  const hipR = useRef<THREE.Group>(null);
+  const kneeL = useRef<THREE.Group>(null);
+  const kneeR = useRef<THREE.Group>(null);
+  const mouth = useRef<THREE.Mesh>(null);
+  const eyeL = useRef<THREE.Group>(null);
+  const eyeR = useRef<THREE.Group>(null);
+
+  const curls = useMemo(makeCurls, []);
+  const fabric = useMemo(fabricTexture, []);
+  useEffect(() => () => fabric.dispose(), [fabric]);
+  const m = useMemo(
+    () => ({
+      skin: new THREE.MeshPhysicalMaterial({ color: COLORS.skin, roughness: 0.48, clearcoat: 0.12, clearcoatRoughness: 0.65 }),
+      shirt: new THREE.MeshStandardMaterial({ color: COLORS.shirt, roughness: 0.92, bumpMap: fabric, bumpScale: 0.008 }),
+      pants: new THREE.MeshStandardMaterial({ color: COLORS.pants, roughness: 0.9, bumpMap: fabric, bumpScale: 0.006 }),
+      shoe: new THREE.MeshStandardMaterial({ color: COLORS.shoe, roughness: 0.5 }),
+      hair: new THREE.MeshStandardMaterial({ color: COLORS.hair, roughness: 0.55 }),
+      eye: new THREE.MeshStandardMaterial({ color: COLORS.eye, roughness: 0.3 }),
+      iris: new THREE.MeshStandardMaterial({ color: COLORS.iris, roughness: 0.3 }),
+      mouth: new THREE.MeshStandardMaterial({ color: "#8a3b2b", roughness: 0.6 }),
+      orange: new THREE.MeshStandardMaterial({
+        color: COLORS.orange,
+        emissive: COLORS.orange,
+        emissiveIntensity: 0.6,
+      }),
+    }),
+    [fabric],
+  );
+  useEffect(() => () => Object.values(m).forEach(material => material.dispose()), [m]);
+
+  useFrame(() => {
+    const p = pose.current;
+    const w = p.walk * (1 - p.sit);
+    const s = p.sit;
+    const ph = p.walkPhase;
+    const sn = Math.sin(ph);
+    const cs = Math.cos(ph);
+    const t = p.time;
+
+    if (pelvis.current) {
+      pelvis.current.position.y = lerp(STAND_Y, SIT_Y, s) + (1 - Math.cos(ph * 2)) * 0.012 * w;
+    }
+    if (torso.current) {
+      torso.current.rotation.set(0.08 * p.type * s + Math.sin(t * 1.65) * 0.008, sn * 0.065 * w + Math.sin(t * 0.6) * 0.012 * s, Math.sin(ph) * 0.025 * w);
+      torso.current.scale.y = 1 + Math.sin(t * 1.65) * 0.006;
+    }
+
+    // legs
+    if (hipL.current && kneeL.current && hipR.current && kneeR.current) {
+      hipL.current.rotation.x = -s * (Math.PI / 2) - sn * 0.6 * w;
+      hipR.current.rotation.x = -s * (Math.PI / 2) + sn * 0.6 * w;
+      kneeL.current.rotation.x = s * (Math.PI / 2) + Math.max(0, -cs) * 0.8 * w;
+      kneeR.current.rotation.x = s * (Math.PI / 2) + Math.max(0, cs) * 0.8 * w;
+      // slightly splay seated knees
+      hipL.current.rotation.z = -0.05 * s;
+      hipR.current.rotation.z = 0.05 * s;
+    }
+
+    // arms
+    const arm = (
+      sh: THREE.Group | null,
+      el: THREE.Group | null,
+      side: 1 | -1,
+      swing: number,
+    ) => {
+      if (!sh || !el) return;
+      let shx = swing * 0.55 * w;
+      let elx = -0.25 * w;
+      shx = lerp(shx, -0.35, s);
+      elx = lerp(elx, -0.7, s);
+      shx = lerp(shx, -0.42, p.type);
+      elx = lerp(elx, -0.95 + (Math.sin(t * 10.5 + side * 1.7) + Math.sin(t * 17.3)) * 0.018, p.type);
+      let shz = side * lerp(0.06, -0.1, p.type);
+      let elz = 0;
+      if (side === -1 && p.wave > 0.001) {
+        shz = lerp(shz, -2.55, p.wave);
+        shx = lerp(shx, 0, p.wave);
+        elx = lerp(elx, 0, p.wave);
+        elz = Math.sin(t * 7.5) * 0.32 * p.wave;
+      }
+      sh.rotation.set(shx, 0, shz);
+      el.rotation.set(elx, 0, elz);
+    };
+    arm(shL.current, elL.current, 1, sn);
+    arm(shR.current, elR.current, -1, -sn);
+
+    // head
+    if (head.current) {
+      head.current.rotation.set(
+        0.14 * p.type + Math.sin(t * 6) * 0.04 * p.talk + Math.sin(t * 0.8) * 0.015,
+        Math.sin(t * 0.48) * 0.045 * s,
+        Math.sin(t * 1.3) * 0.04 * p.attention,
+      );
+    }
+    // face
+    if (mouth.current) {
+      const open = p.talk * (0.4 + 0.6 * Math.abs(Math.sin(t * 13)));
+      mouth.current.scale.set(1, 0.35 + open * 1.6, 1);
+    }
+    const blinkPhase = (t + Math.sin(t * 0.21) * 0.4) % 4.3;
+    const blink = 1 - 0.96 * Math.pow(Math.max(0, 1 - Math.abs(blinkPhase - 0.12) / 0.12), 2);
+    if (eyeL.current) eyeL.current.scale.y = blink;
+    if (eyeR.current) eyeR.current.scale.y = blink;
+  });
+
+  const Limb = ({
+    side,
+    sh,
+    el,
+  }: {
+    side: 1 | -1;
+    sh: MutableRefObject<THREE.Group | null>;
+    el: MutableRefObject<THREE.Group | null>;
+  }) => (
+    <group ref={sh} position={[side * 0.27, 0.46, 0]}>
+      <mesh position={[0, -0.15, 0]} material={m.shirt}>
+        <capsuleGeometry args={[0.07, 0.17, 6, 12]} />
+      </mesh>
+      <group ref={el} position={[0, -0.29, 0]}>
+        <mesh position={[0, -0.14, 0]} material={m.skin}>
+          <capsuleGeometry args={[0.06, 0.15, 6, 12]} />
+        </mesh>
+        <mesh position={[0, -0.29, 0.01]} scale={[0.78, 1, 0.45]} material={m.skin}>
+          <sphereGeometry args={[0.064, 24, 20]} />
+        </mesh>
+        {[0, 1, 2, 3].map(i => <mesh key={i} position={[-0.033 + i * 0.022, -0.35 - Math.sin(i / 3 * Math.PI) * 0.012, 0.016]} rotation={[0.12, 0, (i - 1.5) * 0.06]} material={m.skin}><capsuleGeometry args={[0.012, 0.05, 5, 10]} /></mesh>)}
+        <mesh position={[side * 0.057, -0.29, 0.025]} rotation={[0.3, 0, side * 0.55]} material={m.skin}><capsuleGeometry args={[0.017, 0.036, 5, 12]} /></mesh>
+        {side === 1 && <group position={[0, -0.21, 0]}><mesh rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[0.059, 0.013, 8, 24]} /><meshStandardMaterial color="#171a20" /></mesh><mesh position={[0, 0, 0.059]}><boxGeometry args={[0.065, 0.055, 0.018]} /><meshStandardMaterial color="#18242e" metalness={0.7} roughness={0.2} /></mesh></group>}
+      </group>
+    </group>
+  );
+
+  const Leg = ({
+    x,
+    hip,
+    knee,
+  }: {
+    x: number;
+    hip: MutableRefObject<THREE.Group | null>;
+    knee: MutableRefObject<THREE.Group | null>;
+  }) => (
+    <group ref={hip} position={[x, -0.02, 0]}>
+      <mesh position={[0, -THIGH / 2, 0]} material={m.pants}>
+        <capsuleGeometry args={[0.09, THIGH - 0.18, 6, 12]} />
+      </mesh>
+      <group ref={knee} position={[0, -THIGH, 0]}>
+        <mesh position={[0, -SHIN / 2, 0]} material={m.pants}>
+          <capsuleGeometry args={[0.075, SHIN - 0.15, 6, 12]} />
+        </mesh>
+        <mesh position={[0, -SHIN - 0.025, 0.055]} scale={[0.075, 0.065, 0.145]} material={m.shoe}><sphereGeometry args={[1, 24, 16]} /></mesh>
+        <mesh position={[0, -SHIN - 0.067, 0.06]} scale={[0.078, 0.022, 0.15]} material={m.shoe}><sphereGeometry args={[1, 24, 12]} /></mesh>
+        {[0, 1, 2, 3].map(i => <mesh key={i} position={[0, -SHIN + 0.027 - i * 0.004, 0.04 + i * 0.023]} rotation={[0, 0, i % 2 ? 0.1 : -0.1]} material={m.shoe}><boxGeometry args={[0.09, 0.006, 0.006]} /></mesh>)}
+      </group>
+    </group>
+  );
+
+  return (
+    <group scale={AVATAR_SCALE}>
+      <group ref={pelvis}>
+        <mesh material={m.pants}>
+          <boxGeometry args={[0.34, 0.2, 0.24]} />
+        </mesh>
+
+        <Leg x={0.1} hip={hipL} knee={kneeL} />
+        <Leg x={-0.1} hip={hipR} knee={kneeR} />
+
+        <group ref={torso} position={[0, 0.1, 0]}>
+          <mesh position={[0, 0.3, 0]} scale={[1, 1, 0.65]} material={m.shirt}>
+            <capsuleGeometry args={[0.22, 0.34, 8, 16]} />
+          </mesh>
+          {/* orange </> chip on the chest */}
+          <mesh position={[0.12, 0.42, 0.147]} material={m.orange}>
+            <boxGeometry args={[0.08, 0.025, 0.005]} />
+          </mesh>
+
+          <Limb side={1} sh={shL} el={elL} />
+          <Limb side={-1} sh={shR} el={elR} />
+
+          <mesh position={[0, 0.6, 0]} material={m.skin}>
+            <cylinderGeometry args={[0.06, 0.07, 0.1, 12]} />
+          </mesh>
+
+          <group ref={head} position={[0, 0.8, 0]}>
+            <mesh scale={[0.92, 1.08, 0.91]} material={m.skin}>
+              <sphereGeometry args={[0.19, 36, 36]} />
+            </mesh>
+            {/* ears */}
+            <mesh position={[0.19, 0, 0]} material={m.skin}>
+              <sphereGeometry args={[0.04, 10, 10]} />
+            </mesh>
+            <mesh position={[-0.19, 0, 0]} material={m.skin}>
+              <sphereGeometry args={[0.04, 10, 10]} />
+            </mesh>
+            {/* eyes */}
+            {([0.075, -0.075] as const).map((x, i) => (
+              <group key={x} ref={i === 0 ? eyeL : eyeR} position={[x, 0.035, 0.165]}>
+                <mesh scale={[1, 1, 0.5]} material={m.eye}>
+                  <sphereGeometry args={[0.04, 12, 12]} />
+                </mesh>
+                <mesh position={[0, 0, 0.012]} scale={[1, 1, 0.5]} material={m.iris}>
+                  <sphereGeometry args={[0.025, 24, 20]} />
+                </mesh>
+                <mesh position={[0, 0, 0.026]} scale={[1, 1, 0.45]}><sphereGeometry args={[0.014, 20, 16]} /><meshStandardMaterial color="#100c09" roughness={0.15} /></mesh>
+                <mesh position={[-0.008, 0.011, 0.033]}><sphereGeometry args={[0.006, 12, 10]} /><meshBasicMaterial color="#ffffff" /></mesh>
+              </group>
+            ))}
+            {/* brows */}
+            <mesh position={[0.075, 0.095, 0.165]} rotation={[0, 0, -0.1]} material={m.hair}>
+              <boxGeometry args={[0.08, 0.016, 0.02]} />
+            </mesh>
+            <mesh position={[-0.075, 0.095, 0.165]} rotation={[0, 0, 0.1]} material={m.hair}>
+              <boxGeometry args={[0.08, 0.016, 0.02]} />
+            </mesh>
+            {/* nose + mouth */}
+            <mesh position={[0, -0.02, 0.19]} material={m.skin}>
+              <sphereGeometry args={[0.022, 10, 10]} />
+            </mesh>
+            <mesh ref={mouth} rotation={[0, 0, Math.PI * 1.1]} position={[0, -0.066, 0.172]} material={m.mouth}>
+              <torusGeometry args={[0.038, 0.006, 8, 24, Math.PI * 0.8]} />
+            </mesh>
+            {/* curly hair */}
+            {curls.map((c, i) => (
+              <mesh key={i} position={c.p} material={m.hair}>
+                <sphereGeometry args={[c.r, 14, 10]} />
+              </mesh>
+            ))}
+          </group>
+        </group>
+      </group>
+    </group>
+  );
+}
+
+export default memo(Avatar);

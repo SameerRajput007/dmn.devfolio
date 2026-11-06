@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { m as motion } from 'framer-motion'
-import portraitImage from '../assets/portrait.jpg'
+import OtisPortrait from '../components/otis/OtisPortrait.jsx'
 import SectionHeading from '../components/SectionHeading.jsx'
 import revealVariants from './revealVariants.js'
 import './About.css'
@@ -21,13 +21,7 @@ function About() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        <div className="about-image-wrap about-premium-image">
-          <img src={portraitImage} alt="Sameer profile" loading="lazy" decoding="async" />
-          <div className="image-caption">
-            <span className="caption-line" />
-            <span>Developer in progress</span>
-          </div>
-        </div>
+        <OtisPortrait />
 
         <div className="about-copy about-premium-copy">
           <span className="small-label">&#123; WHO I AM &#125;</span>

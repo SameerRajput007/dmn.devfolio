@@ -1,0 +1,141 @@
+
+import {
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  type MutableRefObject,
+} from "react";
+
+import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+import * as THREE from "three";
+
+import type { Pose } from "./lib/pose";
+import { AVATAR_SCALE, SIT_Y, STAND_Y } from "./lib/layout";
+
+type Props = {
+  pose: MutableRefObject<Pose>;
+};
+
+const HEIGHT = 2.35;
+const MODEL_PATH = "/models/avatar_walking_final.glb";
+const WALK_CLIP = "WalkingWhileTexting_Retargeted";
+
+function Avatar({ pose }: Props) {
+  const root = useRef<THREE.Group>(null);
+
+  const gltf = useGLTF(MODEL_PATH);
+
+  // Each Avatar gets an independent skeleton.
+  const avatar = useMemo(
+    () => clone(gltf.scene),
+    [gltf.scene]
+  );
+
+  const dimensions = useMemo(() => {
+    const bounds = new THREE.Box3().setFromObject(avatar);
+    const size = bounds.getSize(new THREE.Vector3());
+
+    const scale = HEIGHT / Math.max(size.y, 0.001);
+
+    return {
+      scale,
+      centerX: (bounds.min.x + bounds.max.x) / 2,
+      centerZ: (bounds.min.z + bounds.max.z) / 2,
+      bottom: bounds.min.y,
+    };
+  }, [avatar]);
+
+  const animation = useMemo(() => {
+    const clip = gltf.animations.find(
+      (item) => item.name === WALK_CLIP
+    );
+
+    if (!clip) {
+      console.warn(
+        `Walking animation "${WALK_CLIP}" not found.`,
+        gltf.animations.map((item) => item.name)
+      );
+      return null;
+    }
+
+    const mixer = new THREE.AnimationMixer(avatar);
+    const action = mixer.clipAction(clip);
+
+    action.setLoop(THREE.LoopRepeat, Infinity);
+    action.enabled = true;
+    action.setEffectiveWeight(0);
+    action.setEffectiveTimeScale(1);
+    action.play();
+
+    return { mixer, action };
+  }, [avatar, gltf.animations]);
+
+  useEffect(() => {
+    return () => {
+      animation?.mixer.stopAllAction();
+    };
+  }, [animation]);
+
+  useFrame((_, delta) => {
+    const p = pose.current;
+
+    const walk = THREE.MathUtils.clamp(
+      p.walk * (1 - p.sit),
+      0,
+      1
+    );
+
+    const sit = THREE.MathUtils.clamp(p.sit, 0, 1);
+
+    // Preserve existing vertical positioning.
+    if (root.current) {
+      root.current.position.y = THREE.MathUtils.lerp(
+        STAND_Y,
+        SIT_Y,
+        sit
+      );
+    }
+
+    if (!animation) return;
+
+    // Smoothly blend the walking motion in and out.
+    const currentWeight =
+      animation.action.getEffectiveWeight();
+
+    const nextWeight = THREE.MathUtils.damp(
+      currentWeight,
+      walk,
+      8,
+      delta
+    );
+
+    animation.action.setEffectiveWeight(nextWeight);
+
+    // The scene controls forward movement.
+    // The GLB controls the character's walking pose.
+    animation.mixer.update(Math.min(delta, 0.05));
+  });
+
+  return (
+    <group scale={AVATAR_SCALE}>
+      <group ref={root}>
+        <primitive
+          object={avatar}
+          scale={dimensions.scale}
+          position={[
+            -dimensions.centerX * dimensions.scale,
+            -dimensions.bottom * dimensions.scale - 0.95,
+            -dimensions.centerZ * dimensions.scale,
+          ]}
+        />
+      </group>
+    </group>
+  );
+}
+
+useGLTF.preload(MODEL_PATH);
+
+export default memo(Avatar);
