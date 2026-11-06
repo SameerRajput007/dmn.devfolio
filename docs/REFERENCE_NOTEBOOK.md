@@ -66,3 +66,15 @@ A living collection of references for the React/Vite portfolio. Entries are idea
 ## 6. Decision log
 
 - 2026-11-06: Created reference notebook. No components selected for implementation.
+
+## Additional animation and design references (November 4–6)
+
+- **3D stack:** Three.js, React Three Fiber, Drei, Framer Motion/Motion, GSAP. Possible use: interactive 3D hero, scene composition and motion timelines.
+- **Design and research:** 21st.dev (UI patterns), Codrops (creative effects), Lighthouse (performance/accessibility auditing).
+- **References awaiting precise links:** Graphify; Never Get Hacked. Names recorded, URLs and intended uses to confirm.
+- **Avatar and studio concepts:** Avaturn rigged GLB avatar, procedural character animations, Blender studio scene and cinematic developer workspace.
+- **Effects idea bank:** particles, shaders, X-ray, exploded and cutaway views, blueprint overlays, CRT, datamoshing, 1-bit dithering, and interactive 360-degree object rotation.
+- **Review before implementation:** licensing, React/Vite compatibility, mobile responsiveness, reduced-motion preferences and GPU performance.
+- **Status:** Collected for reference only; nothing deployed or selected for implementation.
+
+Decision log: 2026-11-06 — Added recent animation/framework ideas to the single reference notebook.
