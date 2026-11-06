@@ -1,0 +1,36 @@
+/* Isolated cinematic hero enhancement. Existing sections and themes stay intact. */
+.hero-red-upgrade {
+  background: radial-gradient(ellipse at 76% 44%, rgba(142, 8, 22, .32), transparent 48%), var(--bg);
+}
+.hero-red-upgrade .hero-red-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,.4), transparent 65%),
+              radial-gradient(circle at 78% 44%, rgba(255,30,48,.18), transparent 38%);
+}
+.hero-red-upgrade .hero-visual { perspective: 1200px; }
+.hero-red-upgrade .hero-red-portrait {
+  transform-origin: 55% 50%;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  filter: drop-shadow(22px 8px 45px rgba(186, 15, 35, .32));
+}
+.hero-red-upgrade .hero-image {
+  filter: grayscale(.25) contrast(1.13) brightness(.85)
+          drop-shadow(12px 0 25px rgba(220, 16, 35, .25));
+  mix-blend-mode: normal;
+}
+.hero-red-upgrade .hero-red-portrait::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent 35%, rgba(182, 0, 24, .26) 90%);
+  mix-blend-mode: screen;
+}
+:root[data-theme='light'] .hero-red-upgrade {
+  background: radial-gradient(ellipse at 78% 43%, rgba(172, 38, 45, .15), transparent 48%), var(--bg);
+}
+@media (max-width: 700px) {
+  .hero-red-upgrade .hero-red-glow { opacity: .65; }
+  .hero-red-upgrade .hero-red-portrait { filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-red-upgrade .hero-red-portrait { will-change: auto; }
+}
