@@ -13,3 +13,10 @@
 ## Repository synchronization
 
 The VS Code project uses SameerRajput007/dmn.devfolio. The user confirmed Vercel deploys SameerRajput007/dmn.devfolio21. Their local refactor was preserved as commit 337e3d1 on backup/local-portfolio in dmn.devfolio. The integration ports the cloud features into that refactor; dmn.devfolio21/main received the integrated source. The cloud session was denied write access to dmn.devfolio; the Mac owner must pull the integration and push it to their usual origin using the steps in docs/LOCAL-SYNC.md. Do not overwrite the refactor with the earlier monolithic App.jsx.
+
+## dmn.dev cinematic scene
+- User selected Star Atlas Experience (https://experience.staratlas.com/) and Lusion projects (https://lusion.co/projects/) as sufficient references and asked to proceed.
+- Based on `feature/3d-avatar-hero` commit d547365; working branch `codex/cinematic-scroll`.
+- Replaced the three-pose-only hero with an original scroll-driven WebGL scene; retains existing assets and downstream features.
+- No original head-turn video or intermediate portrait frames were supplied. Do not claim continuous head rotation.
+- Browser verification is blocked in this execution environment: Chromium cannot create its process-singleton socket, and the separate browser cannot reach the local Vite server. Build/lint and source checks are recorded separately from browser checks.
