@@ -195,9 +195,7 @@ function App() {
           />
 
           <main id="main" tabIndex={-1}>
-            <div id="home">
-              <CinematicPortrait />
-            </div>
+            <CinematicPortrait />
 
             <div className="section-wrap">
               <AvatarAssistant />
