@@ -103,3 +103,14 @@ Decision log: 2026-11-06 — Added recent animation/framework ideas to the singl
 - **Status:** Collected; source reviewed; not integrated.
 
 Decision log: 2026-11-06 — Added the user-supplied Otis archive and implementation notes to the existing reference notebook.
+
+### Skiper UI — Skiper18 (2026-11-06)
+- **Category:** UI component / hero interaction reference.
+- **Source:** Installation command supplied by the user.
+- **Command:** `npx shadcn add @skiper-ui/skiper18`
+- **Related repository branch:** `feature/hero-skiper18` (previously located).
+- **Potential use for dmn.dev:** Revisit the component as a hero design and interaction reference.
+- **Verification:** Command recorded as supplied; not executed in this update. Current component behavior, dependencies, licensing and compatibility have not been verified.
+- **Status:** Collected for reference; this notebook update does not install or integrate the component.
+
+Decision log: 2026-11-06 — Added the user-supplied Skiper18 command to the existing reference notebook.
