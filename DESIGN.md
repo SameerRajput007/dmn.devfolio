@@ -15,3 +15,6 @@ Introduction → personal story → services → skills → selected work → vi
 
 ## Responsive and motion behavior
 Controls wrap on narrow screens, then stack above the portrait. The light reveal is centered for touch users; reduced motion and pause expose the full image. Avoid strobing, autoplay audio, hijacked scrolling, and replacing the native cursor. Effects should explain craft, not obstruct reading.
+
+## Approved cinematic direction for dmn.dev
+The user's Star Atlas/Lusion direction supersedes the earlier instruction to retain the old hero. Use an original near-black environment, red-orange portal light, oversized outlined typography, subtle instrument captions, and synchronized chapters: Arrival → Perspective → Connection → Beyond. Existing portfolio sections and their theme remain intact. The hero is deliberately dark in both themes to preserve its authored lighting. No third-party scene code, branding, imagery, or credentials are copied. The three-pose portrait uses shader-assisted transitions; continuous rotation requires additional media.

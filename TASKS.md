@@ -16,3 +16,11 @@
 - [ ] Run production mobile/desktop Lighthouse, record actual scores and investigate failures.
 - [ ] Check optional Google Business Profile eligibility; do not create an online-only profile that violates eligibility rules.
 - [ ] If broader search-engine crawl compatibility becomes necessary, evaluate prerendering or SSR; metadata alone does not prerender React body content.
+
+## dmn.dev cinematic introduction
+- [x] Correct sticky ancestor overflow and remove duplicated home id.
+- [x] Add a lazy WebGL scene with scroll camera travel, star field, portals, and portrait shader transitions.
+- [x] Add chapter navigation, pause, skip, touch layout, reduced motion, and static error fallback.
+- [x] Remove a pre-existing unused sticker array to unblock ESLint.
+- [ ] Verify visual output, pose timing, reverse scrolling, pause/resume, chapter navigation, and release into About on desktop and mobile browsers. Local browser startup/connection is blocked in this environment.
+- [ ] Supply an authored portrait video or intermediate frames if continuous head rotation is desired.

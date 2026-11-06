@@ -23,3 +23,6 @@ Preserve the existing portfolio, task demo and contact form. Add a contained int
 
 ## External follow-up
 Search Console verification/submission, production Lighthouse measurements, and Google Business Profile eligibility/account setup require owner action. No guaranteed ranking, AI citation, or security certification is promised.
+
+## dmn.dev cinematic introduction
+User-approved direction: Star Atlas Experience and Lusion projects. Replace the static hero with an original, pinned, scroll-controlled scene using existing portrait assets, real-time depth, and synchronized titles. Preserve all downstream portfolio features. Scroll is native and reversible; chapter buttons, pause, skip, reduced motion, and a WebGL-unavailable fallback are required. Three existing poses remain photographic crossfades, not a continuous filmed head rotation.

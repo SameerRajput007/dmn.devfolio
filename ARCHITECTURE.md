@@ -24,3 +24,6 @@ Vercel serves `dist` after `npm run build`. `public/robots.txt`, `public/sitemap
 
 ## Trust boundaries
 Email content is URI-encoded and passed to the visitor’s email application. No HTML injection or user-data persistence is used by the form. DM Sans and Space Grotesk are self-hosted from Fontsource; no external font service is required. Never put credentials into Vite variables: client bundles are public.
+
+## dmn.dev cinematic introduction
+`CinematicPortrait.jsx` owns scroll progress, section visibility, chapter navigation, and motion preferences. A dynamically imported `portrait/createPortraitScene.js` owns a disposable Three.js renderer, three portrait textures, a full-screen shader, a deterministic 3D star field, and portal meshes. One normalized progress value drives camera travel, pose blends, shader assembly/dispersal, and titles. Rendering runs on scroll/pointer/resize requests and stops after interpolation settles; observers and document visibility suppress offscreen/background rendering. Shared geometry, textures, materials, listeners, and animation frames are disposed on cleanup. Reduced motion skips WebGL loading; errors expose a static portrait. `.portfolio` uses `overflow: clip` to preserve viewport sticky positioning.
