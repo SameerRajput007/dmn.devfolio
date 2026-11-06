@@ -86,3 +86,20 @@ Decision log: 2026-11-06 — Added recent animation/framework ideas to the singl
 - **Verification:** Public YouTube page title identified; video scenes, specific animation techniques, frameworks, and example website links have not been verified. Do not assume it uses Three.js, GSAP, or WebGL.
 - **Next review:** Inspect video visually or obtain timestamps/screenshots; identify reusable effects, implementation approach, performance and licensing considerations.
 - **Status:** Reference only; no portfolio code changes.
+
+### Otis — Interactive portrait / WebGL motion reference (2026-11-06)
+- **Original source:** User-provided `otis.zip`; [original archive](https://chatgpt.com/library?file_id=libfile_46159c8f398c81918a8720952d850b5b&account_id=personal). This link requires access to the owner's ChatGPT file; the ZIP is not committed to this repository.
+- **Category:** Interactive photographic portrait, shader deformation, expressive motion and editorial hero composition.
+- **Technology:** React, TypeScript, Vite, WebGL2 and custom GLSL shaders.
+- **Source reviewed:** `src/App.tsx`, `src/face/FaceCanvas.tsx`, `src/face/engine.ts`; archive contains fourteen WebP expression images.
+- **What it does:** Maps portrait images onto a 128 × 128 grid of cells, deforms the mesh around pointer grabs, and returns it with damped spring motion. Expression changes use texture crossfades.
+- **Important features:** Up to four grab slots, alpha-based hit testing, pointer capture, cursor-responsive expression selection, tap reactions, shader blush, patience/mood feedback, oversized typography and overlapping canvas composition.
+- **Performance and fallback:** Device pixel ratio capped at 2; animation pauses offscreen; expression textures warm progressively; a static image fallback is provided when renderer initialization fails.
+- **Potential use for dmn.dev:** Study how one carefully executed portrait interaction, prepared imagery, typography and responsive feedback establish a premium hero. Preserve dmn.dev's own identity and cinematic direction.
+- **Technical distinction:** This is a deformed photographic mesh, not a fully modeled 3D head.
+- **Verification:** Source inspected; not run in a browser. Live appearance, smoothness, mobile behavior, accessibility and reduced-motion handling remain to be tested.
+- **License/usage notes:** No license file appears in the supplied archive. Original author, asset permissions and generation prompt have not been established.
+- **Prompt context:** User reports the originating service offers a prompt retrieval option; original prompt has not been supplied.
+- **Status:** Collected; source reviewed; not integrated.
+
+Decision log: 2026-11-06 — Added the user-supplied Otis archive and implementation notes to the existing reference notebook.
