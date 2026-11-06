@@ -78,3 +78,11 @@ A living collection of references for the React/Vite portfolio. Entries are idea
 - **Status:** Collected for reference only; nothing deployed or selected for implementation.
 
 Decision log: 2026-11-06 — Added recent animation/framework ideas to the single reference notebook.
+
+### YouTube inspiration — AI-built portfolio website (2026-11-06)
+- **Video:** [$7000 Portfolio Website With Free AI Tools In 10 Minutes || No Coding](https://youtu.be/tf_yi6DtDOQ?si=Ij8Y4kjodIfCY3KB)
+- **Category:** Portfolio design / AI website-building workflow / possible motion inspiration.
+- **Why saved:** Review website presentation, transitions, 3D effects, motion, and visual storytelling for possible ideas in dmn.devfolio.
+- **Verification:** Public YouTube page title identified; video scenes, specific animation techniques, frameworks, and example website links have not been verified. Do not assume it uses Three.js, GSAP, or WebGL.
+- **Next review:** Inspect video visually or obtain timestamps/screenshots; identify reusable effects, implementation approach, performance and licensing considerations.
+- **Status:** Reference only; no portfolio code changes.
