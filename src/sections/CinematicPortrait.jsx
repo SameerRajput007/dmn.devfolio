@@ -104,7 +104,7 @@ const portraitX = useTransform(
 
           <motion.img
             src={portraitFront}
-            alt="Cinematic portrait of DMN"
+            alt="Cinematic portrait of Sameer Singh Rajput"
             style={{
               opacity: reduceMotion ? 1 : frontOpacity,
             }}
@@ -118,16 +118,15 @@ const portraitX = useTransform(
 
         <div className="cinematic-text">
           <p className="cinematic-eyebrow eyebrow">
-            DEVELOPER · CREATOR
+            JUNIOR WEB DEVELOPER · UI ENTHUSIAST
           </p>
 
           <h1>
-            Hi, I'm <span>DMN.</span>
+            Hi, I'm <span>Sameer.</span>
           </h1>
 
           <p className="cinematic-description">
-            Building modern web experiences with
-            creativity, precision, and passion.
+            I build responsive interfaces with React, JavaScript, and CSS, and share what I’m learning through practical projects.
           </p>
 
           <div className="cinematic-buttons">
