@@ -6,7 +6,7 @@ export const projects = [
     title: 'Portfolio Website',
     category: 'Frontend Development',
     description:
-      'A personal portfolio to showcase my skills, projects, and experience with a responsive layout.',
+      'A React and Vite portfolio with scroll-linked portrait motion, a saved theme preference, project filters, and an interactive visual lab.',
     tags: ['React', 'CSS', 'JavaScript'],
     link: 'https://github.com/SameerRajput007/dmn.devfolio',
     image: portraitImage,
@@ -15,7 +15,7 @@ export const projects = [
     title: 'Todo List App',
     category: 'Web Application',
     description:
-      'A simple task manager that helps users add tasks, mark them complete, and remove them.',
+      'A task app where visitors can add, edit, complete, and delete tasks. Tasks are saved in the browser between visits.',
     tags: ['React', 'Hooks', 'CSS'],
     link: '#playground', // the live todo app on this page
     image: ghostImage,
@@ -24,7 +24,7 @@ export const projects = [
     title: 'Interaction Lab',
     category: 'UI Development',
     description:
-      'An interactive portrait study exploring particles, visual treatments, and layered interfaces.',
+      'A set of Canvas and CSS portrait studies with particle, dither, CRT, glitch, and flashlight treatments, plus layered image views.',
     tags: ['HTML', 'CSS', 'Responsive'],
     link: '#visual-lab',
     image: ghostImage,
