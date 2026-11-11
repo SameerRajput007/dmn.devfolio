@@ -8,7 +8,7 @@ function Footer() {
         <span className="brand-name">Sameer<span className="brand-dot"></span></span>
       </a>
 
-      <p>Designed and built by self.</p>
+      <p>Designed and built by Sameer Rajput.</p>
 
       <div className="footer-socials">
         <a href="https://github.com/SameerRajput007" target="_blank" rel="noreferrer" aria-label="GitHub" data-tooltip="GitHub">
