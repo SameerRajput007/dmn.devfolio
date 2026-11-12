@@ -1,0 +1,7 @@
+Mode: built-in image_gen. Reference: src/assets/angel-sky.png
+
+DAY
+Use case: precise-object-edit. Portfolio hero background, wide landscape. Reference image is current hero. Keep the blue daytime sky, clouds, Earth landscape, composition and beautiful outstretched detailed white feather wings unchanged. Replace the ENTIRE human body, head, face, chest, hands, legs and robes with an abstract column of brilliant pure white light and softly diffused glowing energy. No visible face, eyes, hair, muscles, skin, anatomy, fingers or human details whatsoever. It is a formless celestial light presence between the wings, not a human. Keep light source in the same right-of-center location. No text.
+
+NIGHT
+Use case: precise-object-edit. Portfolio hero background, wide landscape. Reference image is current hero. Transform into deep midnight navy night sky with subtle stars, moonlight, wispy clouds and dark Earth far below. Angel at same right-of-center position is upright, standing vertically above Earth, bowed downward in a contemplative posture, but the entire body/head is an abstract featureless brilliant white light presence with no face, eyes, skin, hair, muscles or anatomy. Crucially change wings to lowered resting wings: two long luminous white feather wings sweep DOWN along either side of the vertical glowing presence, tips pointing toward Earth, NOT spread upwards or horizontally. Detailed beautiful feathers with cool silver edges. Dark cinematic peaceful atmosphere with ample dark empty sky at left for text. No text.

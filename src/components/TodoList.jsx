@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { Component, Suspense, lazy, useEffect, useRef, useState } from 'react'
+
 import {
   CalendarDays,
   Check,
@@ -12,6 +13,15 @@ import {
   Trash2,
   Zap,
 } from 'lucide-react'
+
+const Globe3DDemo = lazy(() => import('./3d-globe-demo'))
+
+class GlobeBackgroundBoundary extends Component {
+  state = { failed: false }
+  static getDerivedStateFromError() { return { failed: true } }
+  render() { return this.state.failed ? null : this.props.children }
+}
+
 
 const filters = [
   { id: 'all', label: 'All Tasks', icon: House },
@@ -195,6 +205,11 @@ function TodoList() {
       </aside>
 
       <div className="todo-main">
+        <div className="todo-globe-background" aria-hidden="true" inert>
+          <GlobeBackgroundBoundary>
+            <Suspense fallback={null}><Globe3DDemo /></Suspense>
+          </GlobeBackgroundBoundary>
+        </div>
         <form className="todo-compose" onSubmit={addTask}>
           <label className="todo-compose-icon" htmlFor="todo-compose-input">
             <Plus size={20} />

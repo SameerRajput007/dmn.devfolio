@@ -1,0 +1,66 @@
+.cinematic-portrait-section { --hero-header-height:76px; --hero-header-gap:16px; --journey:0; --intro:1; --portrait-fade:0; --exit:0; position:relative; height:480svh; background:#030406; isolation:isolate; color:#f1eeeb; scroll-margin-top:calc(var(--hero-header-height) + var(--hero-header-gap)); }
+.cinematic-sticky { position:sticky; top:calc(var(--hero-header-height) + var(--hero-header-gap)); height:calc(100svh - var(--hero-header-height) - var(--hero-header-gap)); width:100%; overflow:hidden; background:#030406; }
+.journey-canvas,.journey-haze,.journey-vignette { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.journey-haze { background:radial-gradient(ellipse at 72% 45%,#4b0e103d,transparent 52%),radial-gradient(ellipse at 48% 100%,#b425132b,transparent 50%); }
+.journey-canvas { z-index:1; }
+.journey-fallback { position:absolute; right:0; width:64%; height:100%; top:0; object-fit:contain; object-position:center; opacity:.8; mask-image:linear-gradient(90deg,transparent,#000 24%); }
+.journey-fallback.is-hidden { opacity:0; }
+.journey-vignette { z-index:2; background:linear-gradient(0deg,#030406 0%,transparent 22%,transparent 78%,#030406b3),radial-gradient(ellipse at 60% 48%,transparent 35%,#030406c9 100%); }
+.journey-top { position:absolute; z-index:4; left:4vw; right:4vw; top:30px; display:flex; justify-content:space-between; gap:20px; font:9px/1.5 ui-monospace,monospace; letter-spacing:.16em; }
+#root .portfolio #home .journey-top span { color:#a9aaa9; }
+#root .portfolio #home .journey-top .journey-live { color:#ff7256; }
+.journey-orbit-label { position:absolute; z-index:4; right:4vw; top:45%; writing-mode:vertical-rl; font:10px/1 ui-monospace,monospace; letter-spacing:.22em; color:#a9aaa9; }
+#home .cinematic-text { position:absolute; z-index:3; top:30%; left:7vw; width:65%; opacity:var(--portrait-fade); transform:translateY(calc((1 - var(--portrait-fade))*28px)); }
+#root .portfolio #home .cinematic-eyebrow { color:#ff7256; font:10px/1.4 ui-monospace,monospace; letter-spacing:.22em; margin:0 0 24px; }
+#root .portfolio #home .cinematic-text h1 { color:#f1eeeb; font-family:'Space Grotesk Variable',sans-serif; font-size:clamp(48px,7.4vw,116px); line-height:.94; letter-spacing:-.075em; font-weight:600; margin:0 0 26px; }
+#root .portfolio #home .cinematic-text h1 span { color:#f1eeeb; -webkit-text-fill-color:transparent; -webkit-text-stroke:1px #f1eeeb9c; }
+#root .portfolio #home .cinematic-description { color:#b2b1b0; font-size:14px; line-height:1.7; margin-bottom:28px; }
+#home .journey-cta { display:inline-flex; align-items:center; gap:40px; color:#eee; padding:12px 0; border-bottom:1px solid #ff7256; font:10px/1.4 ui-monospace,monospace; letter-spacing:.12em; }
+#root .portfolio #home .journey-cta span { color:#ff7256; font-size:22px; }
+.journey-intro,.journey-outro { position:absolute; z-index:3; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; pointer-events:none; }
+.journey-intro { opacity:var(--intro); transform:scale(calc(1 + var(--journey)*.4)); }
+.journey-outro { opacity:var(--exit); transform:scale(calc(.92 + var(--exit)*.08)); }
+#root .portfolio #home :is(.journey-intro,.journey-outro)>span { color:#ff7256; font:10px/1.5 ui-monospace,monospace; letter-spacing:.35em; margin-bottom:22px; }
+#root .portfolio #home :is(.journey-intro,.journey-outro)>strong { color:#f1eeeb; font:500 clamp(40px,8.8vw,145px)/1 'Space Grotesk Variable',sans-serif; letter-spacing:-.075em; }
+.journey-bottom { position:absolute; z-index:4; bottom:30px; left:4vw; right:4vw; display:flex; justify-content:space-between; align-items:end; gap:24px; }
+.journey-caption { display:flex; align-items:center; gap:14px; font:9px/1.6 ui-monospace,monospace; letter-spacing:.1em; }
+#root .portfolio #home .journey-caption span { color:#c3c2be; }
+.journey-caption small { font-size:8px; color:#73777d; }
+#root .portfolio #home .journey-scroll-mark { font-size:28px; color:#ff7256; }
+.journey-chapters { display:flex; gap:14px; }
+.journey-chapters button { display:flex; flex-direction:column; align-items:start; width:85px; gap:8px; padding:8px 0; background:none; border:0; cursor:pointer; font:8px/1 ui-monospace,monospace; letter-spacing:.08em; }
+#root .portfolio #home .journey-chapters button span { color:#73777d; }
+#root .portfolio #home .journey-chapters button[aria-pressed='true'] span { color:#f1eeeb; }
+.journey-chapters i { display:block; height:1px; width:100%; background:#ffffff30; }
+.journey-chapters button[aria-pressed='true'] i { background:#ff7256; }
+.journey-controls { display:flex; flex-direction:column; align-items:end; gap:15px; font:9px/1.5 ui-monospace,monospace; letter-spacing:.08em; }
+.journey-controls button { font:inherit; letter-spacing:inherit; padding:0; border:0; background:none; color:#a9aaa9; cursor:pointer; }
+#home .journey-controls a { color:#f1eeeb; }
+#home :is(a,button):focus-visible { outline:2px solid #ff7256; outline-offset:6px; }
+.journey-reduced { height:calc(100svh - var(--hero-header-height) - var(--hero-header-gap)); --portrait-fade:1; --intro:0; --exit:0; }
+.journey-reduced .journey-chapters,.journey-reduced .journey-caption { display:none; }
+@media(max-width:720px) {
+ .cinematic-portrait-section:not(.journey-reduced) { height:400svh; }
+ .journey-top { top:24px; left:22px; right:22px; font-size:8px; }
+ .journey-top>span:nth-child(2) { display:none; }
+ .journey-orbit-label { right:18px; top:27%; font-size:8px; }
+ #home .cinematic-text { top:auto; bottom:170px; left:24px; width:calc(100% - 48px); }
+ #root .portfolio #home .cinematic-text h1 { font-size:clamp(43px,10vw,72px); }
+ #root .portfolio #home .cinematic-description { font-size:12px; }
+ #root .portfolio #home .cinematic-eyebrow { margin-bottom:16px; }
+ .journey-vignette { background:linear-gradient(0deg,#030406 5%,#030406d9 26%,transparent 65%,#03040666); }
+ .journey-fallback { width:100%; height:90%; top:5%; mask-image:linear-gradient(0deg,transparent,#000 30%); }
+ .journey-bottom { left:24px; right:24px; bottom:24px; flex-wrap:wrap; gap:18px; }
+ .journey-caption { display:none; }
+ .journey-chapters { width:100%; gap:12px; }
+ .journey-chapters button { width:25%; }
+ .journey-controls { width:100%; flex-direction:row; justify-content:space-between; }
+ #root .portfolio #home :is(.journey-intro,.journey-outro)>strong { font-size:clamp(35px,10.5vw,76px); }
+ .journey-reduced .journey-bottom { justify-content:flex-end; }
+}
+@media(prefers-reduced-motion:reduce) { .cinematic-portrait-section { height:calc(100svh - var(--hero-header-height) - var(--hero-header-gap)); --portrait-fade:1; --intro:0; --exit:0; } }
+.journey-reduced .journey-canvas,.journey-reduced .journey-intro,.journey-reduced .journey-outro { display:none; }
+#home.journey-reduced .cinematic-text { opacity:1; transform:none; }
+/* The stage already starts below the measured navigation height. */
+.journey-top { top:30px; }
+@media(max-width:720px) { .journey-top { top:24px; } }
